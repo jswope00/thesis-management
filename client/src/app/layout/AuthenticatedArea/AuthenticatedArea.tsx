@@ -64,13 +64,13 @@ const links: Array<{
   },
   {
     link: '/submit-application',
-    label: 'Submit Application',
+    label: 'Submit CILE Introduction',
     icon: PaperPlaneTilt,
     groups: undefined,
   },
   {
     link: '/applications',
-    label: 'Review Applications',
+    label: 'Review Proposals',
     icon: Scroll,
     groups: ['admin', 'advisor', 'supervisor'],
   },
@@ -82,13 +82,13 @@ const links: Array<{
   },
   {
     link: '/theses',
-    label: 'Browse Theses',
+    label: 'Browse CILE Projects',
     icon: Table,
     groups: undefined,
   },
   {
     link: '/overview',
-    label: 'Theses Overview',
+    label: 'CILE Projects Overview',
     icon: Kanban,
     groups: ['admin', 'advisor', 'supervisor'],
   },
@@ -180,6 +180,27 @@ const AuthenticatedArea = (props: PropsWithChildren<IAuthenticatedAreaProps>) =>
 
       <AppShell.Navbar p='md'>
         <AppShell.Section grow mb='md'>
+
+          {!minimized && (
+            <Group preventGrowOverflow={false}>
+              <Logo className={classes.logo} />
+              <Text
+                className={classes.siteName}
+                fw='bold'
+                style={{ cursor: 'pointer' }}
+                onClick={() => navigate('/')}
+              >
+                CILE Management
+              </Text>
+              <ColorSchemeToggleButton ml='auto' />
+            </Group>
+          )}
+          {!minimized && <Divider my='sm' />}
+          {minimized && (
+            <Center mb='md'>
+              <ColorSchemeToggleButton />
+            </Center>
+          )}
           {links
             .filter(
               (item) =>

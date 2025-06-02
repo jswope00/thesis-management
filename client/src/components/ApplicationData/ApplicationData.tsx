@@ -80,7 +80,7 @@ const ApplicationData = (props: IApplicationDataProps) => {
             </Grid.Col>
             <Grid.Col span={{ xs: 4, sm: 3 }}>
               <LabeledItem
-                label='Matriculation Number'
+                label='A-Number'
                 value={application.user.matriculationNumber}
                 copyText={application.user.matriculationNumber || undefined}
               />

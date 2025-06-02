@@ -74,7 +74,7 @@ const UserInformationForm = (props: IUserInformationFormProps) => {
     validateInputOnBlur: true,
     validate: {
       matriculationNumber: requireCompletion
-        ? isNotEmpty('Please state your matriculation number')
+        ? isNotEmpty('Please state your A-Number')
         : undefined,
       firstName: requireCompletion ? isNotEmpty('Please state your first name') : undefined,
       lastName: requireCompletion ? isNotEmpty('Please state your last name') : undefined,
@@ -235,8 +235,8 @@ const UserInformationForm = (props: IUserInformationFormProps) => {
           <TextInput
             type='text'
             required={requireCompletion}
-            placeholder='Matriculation Number'
-            label='Matriculation Number'
+            placeholder='A-Number'
+            label='A-Number'
             {...form.getInputProps('matriculationNumber')}
           />
         </Group>

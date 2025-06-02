@@ -41,7 +41,7 @@ const DashboardPage = () => {
         limit={200}
       >
         <Stack gap='xs'>
-          <Title order={2}>My Theses</Title>
+          <Title order={2}>My CILE Projects</Title>
           {managementAccess ? <ThesesGanttChart /> : <ThesesTable />}
         </Stack>
       </ThesesProvider>
@@ -54,11 +54,11 @@ const DashboardPage = () => {
           !managementAccess ? (
             <Stack>
               <Title order={2} mb='sm'>
-                My Applications
+                My CILE Proposals
               </Title>
               <Center>
                 <Button mb='md' component={Link} to='/applications/thesis'>
-                  New Application
+                  New CILE Proposal
                 </Button>
               </Center>
             </Stack>
@@ -66,7 +66,7 @@ const DashboardPage = () => {
         }
       >
         <Stack gap='xs'>
-          <Title order={2}>My Applications</Title>
+          <Title order={2}>My CILE Proposals</Title>
           <ApplicationsTable
             onApplicationClick={setApplication}
             columns={[

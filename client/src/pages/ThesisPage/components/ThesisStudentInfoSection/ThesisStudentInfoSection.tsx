@@ -84,7 +84,7 @@ const ThesisStudentInfoSection = () => {
                   {user.data.matriculationNumber && (
                     <Grid.Col span={{ md: 2 }}>
                       <LabeledItem
-                        label='Matriculation Number'
+                        label='A-Number'
                         value={user.data.matriculationNumber}
                         copyText={user.data.matriculationNumber || undefined}
                       />

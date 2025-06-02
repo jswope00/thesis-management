@@ -13,7 +13,7 @@ const ReviewApplicationPage = () => {
   const navigate = useNavigate()
   const { applicationId } = useParams<{ applicationId: string }>()
 
-  usePageTitle('Review Applications')
+  usePageTitle('Review Proposals')
 
   const isSmallScreen = useIsSmallerBreakpoint('md')
 
