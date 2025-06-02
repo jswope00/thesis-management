@@ -24,8 +24,8 @@ $$
         SELECT user_id
         INTO head_id
         FROM users
-        WHERE university_id = 'ne23kow' -- university_id and user_id (DEV and PROD) of Prof. Krusche
-          AND user_id IN ('76638673-ca5e-4000-8f5c-3da377bf0eda', '69fa250e-f4eb-435f-b1fb-2cff8d051e32')
+        WHERE university_id = 'SGU' -- university_id and user_id (DEV and PROD) of Prof. Krusche
+          AND user_id IN ('admin_supervisor', '69fa250e-f4eb-435f-b1fb-2cff8d051e32')
         LIMIT 1;
 
         IF head_id IS NOT NULL THEN
@@ -43,11 +43,11 @@ $$
                                          archived)
             VALUES (ase_group_id,
                     head_id,
-                    'Applied Education Technologies',
-                    'AET',
-                    'The research group develops innovative, AI-powered educational technologies and practical software solutions in collaboration with industry and academia. Using agile methods and project-based learning, the group prepares students for real-world challenges.',
-                    'https://aet.cit.tum.de/',
-                    'Munich - Garching',
+                    'SGU Department of Public Health and Preventive Medicine',
+                    'SGU DPHPM',
+                    'The Department of Public Health at St. George''s University in Grenada, West Indies',
+                    'https://sgu.edu',
+                    'Grenada',
                     NOW(),
                     head_id,
                     NOW(),

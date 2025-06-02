@@ -98,7 +98,7 @@ The Thesis Coordination Team</p>', 'Application was accepted with same advisor a
 [[${application.user.universityId}]]
 </p>
 <p th:inline="text">
-<strong>Matriculation Number:</strong><br/>
+<strong>A-Number:</strong><br/>
 [[${application.user.matriculationNumber}]]
 </p>
 <p th:inline="text">
@@ -166,7 +166,7 @@ Full Details: <a target="_blank" rel="noopener noreferrer nofollow" th:href="${a
 [[${application.user.universityId}]]
 </p>
 <p th:inline="text">
-<strong>Matriculation Number:</strong><br/>
+<strong>A-Number:</strong><br/>
 [[${application.user.matriculationNumber}]]
 </p>
 <p th:inline="text">

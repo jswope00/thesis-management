@@ -16,7 +16,7 @@
 
 
 WITH defaults
-         AS (SELECT '4d5c6f1b-6e83-4e5e-9f6a-2657dc724aec'::uuid AS research_group_id, -- replace with correct uuid of the AET group
+         AS (SELECT 'd9cfb16e-0134-402a-a206-5a1337bf043d'::uuid AS research_group_id, -- replace with correct uuid of the AET group
                     'en'::text                                   AS language,
                     NOW()                                        AS created_at,
                     NOW()                                        AS updated_at,
@@ -114,7 +114,7 @@ You can view your thesis details and tasks on: <a target="_blank" rel="noopener 
 [[${application.user.universityId}]]
 </p>
 <p th:inline="text">
-<strong>Matriculation Number:</strong><br/>
+<strong>A-Number:</strong><br/>
 [[${application.user.matriculationNumber}]]
 </p>
 <p th:inline="text">
@@ -184,7 +184,7 @@ Full Details: <a target="_blank" rel="noopener noreferrer nofollow" th:href="${a
 [[${application.user.universityId}]]
 </p>
 <p th:inline="text">
-<strong>Matriculation Number:</strong><br/>
+<strong>A-Number:</strong><br/>
 [[${application.user.matriculationNumber}]]
 </p>
 <p th:inline="text">
