@@ -4,6 +4,7 @@ services:
     container_name: thesis-management-db
     volumes:
       - ./db_backups:/db_backups
+      - ./postgres_data:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=thesis-management-postgres
       - POSTGRES_PASSWORD=thesis-management-postgres
@@ -41,3 +42,6 @@ services:
     entrypoint: /opt/keycloak/bin/kc.sh start-dev
     ports:
       - "8081:8080"
+
+volumes:
+  postgres_data:
