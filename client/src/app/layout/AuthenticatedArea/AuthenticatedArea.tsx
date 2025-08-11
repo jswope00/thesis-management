@@ -57,27 +57,15 @@ const links: Array<{
 }> = [
   { link: '/dashboard', label: 'Dashboard', icon: NewspaperClipping, groups: undefined },
   {
-    link: '/presentations',
-    label: 'Presentations',
-    icon: Presentation,
-    groups: undefined,
-  },
-  {
     link: '/submit-application',
     label: 'Submit CILE Topic',
     icon: PaperPlaneTilt,
-    groups: undefined,
+    groups: ['student'],
   },
   {
     link: '/applications',
     label: 'Review Proposals',
     icon: Scroll,
-    groups: ['admin', 'advisor', 'supervisor'],
-  },
-  {
-    link: '/topics',
-    label: 'Manage Topics',
-    icon: FolderSimplePlus,
     groups: ['admin', 'advisor', 'supervisor'],
   },
   {
@@ -94,7 +82,7 @@ const links: Array<{
   },
   {
     link: '/research-groups',
-    label: 'Research Groups',
+    label: 'Group Administration',
     icon: UsersThree,
     groups: ['admin'],
   },

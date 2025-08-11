@@ -38,7 +38,7 @@ const ThesisWritingSection = () => {
     } else {
       throw new ApiError(response)
     }
-  }, 'Thesis submitted successfully')
+  }, 'Final CILE Project submitted successfully')
 
   const onFileUpload = async (type: string, file: File) => {
     const formData = new FormData()
@@ -72,7 +72,7 @@ const ThesisWritingSection = () => {
   const adjustedThesisFiles: typeof GLOBAL_CONFIG.thesis_files = {
     ...GLOBAL_CONFIG.thesis_files,
     THESIS: {
-      label: 'Thesis',
+      label: 'CILE Final Submission',
       description: 'Thesis (PDF)',
       accept: 'pdf',
       required: true,
@@ -95,7 +95,7 @@ const ThesisWritingSection = () => {
   return (
     <Accordion variant='separated' defaultValue='open'>
       <Accordion.Item value='open'>
-        <Accordion.Control>Thesis</Accordion.Control>
+        <Accordion.Control>Final CILE Project Submission</Accordion.Control>
         <Accordion.Panel>
           <Accordion variant='separated' defaultValue='thesis'>
             <Accordion.Item value='thesis'>
@@ -111,7 +111,7 @@ const ThesisWritingSection = () => {
                             url={`/v2/theses/${thesis.thesisId}/files/${thesisFile.fileId}`}
                             filename={formatThesisFilename(
                               thesis,
-                              'Thesis',
+                              'Final CILE Project',
                               thesisFile.filename,
                               0,
                             )}
@@ -126,21 +126,21 @@ const ThesisWritingSection = () => {
                                   accept='pdf'
                                   onUpload={(file) => onFileUpload('THESIS', file)}
                                 >
-                                  Upload Thesis
+                                  Upload Final CILE Project
                                 </UploadFileButton>
                               ) : undefined
                             }
                           />
                         ) : (
                           <Stack>
-                            <Text ta='center'>No thesis uploaded yet</Text>
+                            <Text ta='center'>No file uploaded yet</Text>
                             <Center>
                               <UploadFileButton
                                 maxSize={25 * 1024 * 1024}
                                 accept='pdf'
                                 onUpload={(file) => onFileUpload('THESIS', file)}
                               >
-                                Upload Thesis
+                                Upload Final CILE Project
                               </UploadFileButton>
                             </Center>
                           </Stack>

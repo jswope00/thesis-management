@@ -14,7 +14,7 @@ const ThesisAssessmentSection = () => {
 
   const [assessmentModal, setAssessmentModal] = useState(false)
 
-  if (!access.advisor || !checkMinimumThesisState(thesis, ThesisState.SUBMITTED)) {
+  if (!checkMinimumThesisState(thesis, ThesisState.SUBMITTED)) {
     return <></>
   }
 
@@ -22,10 +22,7 @@ const ThesisAssessmentSection = () => {
     <Accordion variant='separated' defaultValue='open'>
       <Accordion.Item value='open'>
         <Accordion.Control>
-          <Group gap='xs'>
-            <Text>Assessment</Text>
-            <Badge color='grey'>Not visible to student</Badge>
-          </Group>
+          <Text>Assessment</Text>
         </Accordion.Control>
         <Accordion.Panel>
           <Stack>

@@ -115,24 +115,12 @@ export const GLOBAL_CONFIG: IGlobalConfig = {
   },
 
   thesis_files: getEnvironmentVariable<IGlobalConfig['thesis_files']>('THESIS_FILES', true) || {
-    PRESENTATION: {
-      label: 'Presentation',
-      description: 'Presentation (PDF)',
-      accept: 'pdf',
-      required: true,
-    },
-    PRESENTATION_SOURCE: {
-      label: 'Presentation Source',
-      description: 'Presentation Source (KEY, PPTX)',
+    ORAL_PRESENTATION: {
+      label: 'Oral Presentation',
+      description: 'Oral Presentation (Link to video presentation)',
       accept: 'any',
       required: false,
-    },
-    FEEDBACK_LOG: {
-      label: 'Feedback Log',
-      description: 'Feedback Log (PDF)',
-      accept: 'pdf',
-      required: false,
-    },
+    }
   },
 
   default_supervisors: getEnvironmentVariable('DEFAULT_SUPERVISOR_UUID')?.split(';') || [],

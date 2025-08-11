@@ -241,7 +241,7 @@ const ThesisConfigSection = () => {
   return (
     <Accordion variant='separated' defaultValue=''>
       <Accordion.Item value='open'>
-        <Accordion.Control>Configuration</Accordion.Control>
+        <Accordion.Control>Basic Information</Accordion.Control>
         <Accordion.Panel>
           <form onSubmit={form.onSubmit(() => void onSave())}>
             <Stack gap='md'>

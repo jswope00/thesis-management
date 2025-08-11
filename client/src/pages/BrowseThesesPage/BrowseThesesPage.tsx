@@ -9,7 +9,7 @@ import ThesesTable from '../../components/ThesesTable/ThesesTable'
 import CreateThesisModal from './components/CreateThesisModal/CreateThesisModal'
 
 const BrowseThesesPage = () => {
-  usePageTitle('Browse Theses')
+  usePageTitle('Browse CILE Projects')
 
   const [openCreateThesisModal, setOpenCreateThesisModal] = useState(false)
 
@@ -19,7 +19,7 @@ const BrowseThesesPage = () => {
     <ThesesProvider fetchAll={true} limit={20}>
       <Stack>
         <Group>
-          <Title>Browse Theses</Title>
+          <Title>Browse CILE Projects</Title>
           {managementAccess && (
             <Button
               ml='auto'
@@ -27,7 +27,7 @@ const BrowseThesesPage = () => {
               onClick={() => setOpenCreateThesisModal(true)}
               visibleFrom='md'
             >
-              Create Thesis
+              Create New CILE Project
             </Button>
           )}
         </Group>
@@ -40,7 +40,7 @@ const BrowseThesesPage = () => {
               onClick={() => setOpenCreateThesisModal(true)}
               hiddenFrom='md'
             >
-              Create Thesis
+              Create New CILE Project
             </Button>
           </Group>
         )}

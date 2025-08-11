@@ -57,7 +57,7 @@ const ThesisInfoSection = () => {
   return (
     <Accordion variant='separated' defaultValue='open'>
       <Accordion.Item value='open'>
-        <Accordion.Control>Info</Accordion.Control>
+        <Accordion.Control>Additional Details</Accordion.Control>
         <Accordion.Panel>
           <Stack>
             {editMode ? (

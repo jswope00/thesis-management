@@ -30,7 +30,6 @@ const ThesisPage = () => {
         <ThesisProposalSection />
         <ThesisResearchSection />
         <ThesisWritingSection />
-        <ThesisPresentationSection />
         <ThesisAssessmentSection />
         <ThesisFinalGradeSection />
       </Stack>
