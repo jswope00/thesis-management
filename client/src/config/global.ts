@@ -14,6 +14,33 @@ const getEnvironmentVariable = <T = string>(key: string, useJson = false): T | u
   }
 }
 
+const generateTermOptions = () => {
+  const currentYear = new Date().getFullYear()
+  const terms = ['Fall', 'Summer', 'Spring']
+  const years = [currentYear, currentYear - 1, currentYear - 2]
+  const options: Record<string, string> = {}
+  
+  years.forEach(year => {
+    terms.forEach(term => {
+      options[`${term.toUpperCase()}_${year}`] = `${term} ${year}`
+    })
+  })
+  
+  return options
+}
+
+const generateGraduationYears = () => {
+  const currentYear = new Date().getFullYear()
+  const years: Record<string, string> = {}
+  
+  for (let i = 0; i < 6; i++) {
+    const year = currentYear + i
+    years[year.toString()] = year.toString()
+  }
+  
+  return years
+}
+
 export const GLOBAL_CONFIG: IGlobalConfig = {
   title: getEnvironmentVariable('APPLICATION_TITLE') || 'ThesisManagement',
 
@@ -29,55 +56,50 @@ export const GLOBAL_CONFIG: IGlobalConfig = {
     PREFER_NOT_TO_SAY: 'Prefer not to say',
   },
 
+
+  graduation_years: getEnvironmentVariable<Record<string, string>>('GRADUATION_YEARS', true) || generateGraduationYears(),
+
   study_degrees: getEnvironmentVariable<Record<string, string>>('STUDY_DEGREES', true) || {
     BACHELOR: 'Bachelor',
     MASTER: 'Master',
   },
 
-  study_programs: getEnvironmentVariable<Record<string, string>>('STUDY_PROGRAMS', true) || {
-    COMPUTER_SCIENCE: 'Computer Science',
-    INFORMATION_SYSTEMS: 'Information Systems',
-    GAMES_ENGINEERING: 'Games Engineering',
-    MANAGEMENT_AND_TECHNOLOGY: 'Management and Technology',
-    OTHER: 'Other',
-  },
-  topic_views_options: getEnvironmentVariable('TOPIC_VIEWS_OPTIONS', true) || {
-    OPEN: 'Open Topics',
-    PUBLISHED: 'Published Topics',
-  },
-  research_groups_location: getEnvironmentVariable('RESEARCH_GROUPS_LOCATION') || {
-    GARCHING: 'Garching',
-    MUNICH: 'Munich',
-    HEILBRONN: 'Heilbronn',
-    WEIHENSTEPHAN: 'Weihenstephan',
-  },
+  study_programs: getEnvironmentVariable<Record<string, string>>('INCOMING_TERMS', true) || generateTermOptions(),
+
   thesis_types: getEnvironmentVariable<IGlobalConfig['thesis_types']>('THESIS_TYPES', true) || {
-    BACHELOR: {
-      long: 'Bachelor Thesis',
-      short: 'BA',
+    NARRATIVE_REVIEW: {
+      long: 'Narrative Review',
+      short: 'NR',
     },
-    MASTER: {
-      long: 'Master Thesis',
-      short: 'MA',
+    GRANT_PROPOSAL: {
+      long: 'Grant Proposal',
+      short: 'GP',
     },
-    INTERDISCIPLINARY_PROJECT: {
-      long: 'Interdisciplinary Project',
-      short: 'IDP',
+    POLICY_ANALYSIS: {
+      long: 'Policy Analysis',
+      short: 'PA',
     },
-    GUIDED_RESEARCH: {
-      long: 'Guided Research',
-      short: 'GR',
+    CASE_REPORTS: {
+      long: 'Case Reports',
+      short: 'CR',
+    },
+    ORIGINAL_RESEARCH: {
+      long: 'Original Research',
+      short: 'OR',
+    },
+    OTHER: {
+      long: 'Other',
+      short: 'OT',
     },
   },
 
   languages: getEnvironmentVariable<Record<string, string>>('LANGUAGES', true) || {
-    ENGLISH: 'English',
-    GERMAN: 'German',
+    ENGLISH: 'English'
   },
 
   custom_data: getEnvironmentVariable<IGlobalConfig['custom_data']>('CUSTOM_DATA', true) || {
-    GITHUB: {
-      label: 'Github Username',
+    PUBH831_Faculty: {
+      label: 'PUBH831 Faculty',
       required: false,
     },
   },

@@ -6,7 +6,6 @@ export interface ILightUser {
   firstName: string | null
   lastName: string | null
   email: string | null
-  studyDegree: string | null
   studyProgram: string | null
   customData: Record<string, string> | null
   joinedAt: string

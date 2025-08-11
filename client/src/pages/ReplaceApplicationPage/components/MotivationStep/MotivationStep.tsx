@@ -54,7 +54,7 @@ const MotivationStep = (props: IMotivationStepProps) => {
         }
       },
       researchGroupId: isNotEmpty('Please select a research group'),
-      thesisType: isNotEmpty('Please state your thesis type'),
+      thesisType: isNotEmpty('Please state your CILE format'),
       desiredStartDate: isNotEmpty('Please state your desired start date'),
       motivation: (value) => {
         if (!value) {
@@ -169,7 +169,7 @@ const MotivationStep = (props: IMotivationStepProps) => {
           </Accordion>
         ) : (
           <TextInput
-            label='Suggested Thesis Title'
+            label='Suggested CILE Title'
             required={true}
             {...form.getInputProps('thesisTitle')}
           />
@@ -186,7 +186,7 @@ const MotivationStep = (props: IMotivationStepProps) => {
           {...form.getInputProps('researchGroupId')}
         />
         <Select
-          label='Thesis Type'
+          label='CILE Format'
           required={true}
           data={(mergedTopic?.thesisTypes || Object.keys(GLOBAL_CONFIG.thesis_types)).map(
             (thesisType) => ({

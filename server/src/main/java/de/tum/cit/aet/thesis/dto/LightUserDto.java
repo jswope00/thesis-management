@@ -15,7 +15,7 @@ public record LightUserDto (
     String firstName,
     String lastName,
     String email,
-    String studyDegree,
+    String researchFormat,
     String studyProgram,
     Map<String, String> customData,
     Instant joinedAt,

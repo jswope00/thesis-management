@@ -25,7 +25,6 @@ import ApplicationRejectButton from '../ApplicationRejectButton/ApplicationRejec
 import { useLoggedInUser } from '../../hooks/authentication'
 import AvatarUser from '../AvatarUser/AvatarUser'
 import { formatDate, formatThesisType, getDefaultLanguage } from '../../utils/format'
-import LanguageSelect from '../LanguageSelect/LanguageSelect'
 
 interface IApplicationReviewFormProps {
   application: IApplication
@@ -36,7 +35,6 @@ interface IApplicationReviewForm {
   applicationId: string | null
   title: string
   type: string | null
-  language: string | null
   comment: string
   advisors: string[]
   supervisors: string[]
@@ -56,7 +54,6 @@ const ApplicationReviewForm = (props: IApplicationReviewFormProps) => {
       applicationId: null,
       title: '',
       type: null,
-      language: getDefaultLanguage(),
       comment: '',
       advisors: [],
       supervisors: [],
@@ -66,10 +63,9 @@ const ApplicationReviewForm = (props: IApplicationReviewFormProps) => {
     validateInputOnBlur: true,
     validate: {
       title: isNotEmpty('Thesis title must not be empty'),
-      type: isNotEmpty('Thesis type must not be empty'),
+      type: isNotEmpty('CILE format must not be empty'),
       advisors: isNotEmptyUserList('advisor'),
       supervisors: isNotEmptyUserList('supervisor'),
-      language: isNotEmpty('Thesis language must not be empty'),
     },
   })
 
@@ -80,10 +76,9 @@ const ApplicationReviewForm = (props: IApplicationReviewFormProps) => {
         title: application.topic?.title || application.thesisTitle || '',
         comment: application.comment || '',
         type:
-          application.thesisType || GLOBAL_CONFIG.thesis_types[application.user.studyDegree || '']
-            ? application.user.studyDegree
+          application.thesisType || GLOBAL_CONFIG.thesis_types[application.thesisType || '']
+            ? application.thesisType
             : null,
-        language: getDefaultLanguage(),
         advisors: application.topic?.advisors.map((advisor) => advisor.userId) ?? [],
         supervisors: application.topic?.supervisors.map((supervisor) => supervisor.userId) ?? [
           application.researchGroup.head.userId,
@@ -140,7 +135,7 @@ const ApplicationReviewForm = (props: IApplicationReviewFormProps) => {
           data: {
             thesisTitle: values.title,
             thesisType: values.type,
-            language: values.language,
+            language: 'ENGLISH',
             advisorIds: values.advisors,
             supervisorIds: values.supervisors,
             notifyUser: values.notifyUser,
@@ -256,19 +251,13 @@ const ApplicationReviewForm = (props: IApplicationReviewFormProps) => {
           />
 
           <Select
-            label='Thesis Type'
+            label='CILE Format'
             required={true}
             data={Object.keys(GLOBAL_CONFIG.thesis_types).map((key) => ({
               value: key,
               label: formatThesisType(key),
             }))}
             {...form.getInputProps('type')}
-          />
-
-          <LanguageSelect
-            label='Thesis Language'
-            required={true}
-            {...form.getInputProps('language')}
           />
 
           <UserMultiSelect

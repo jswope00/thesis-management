@@ -10,7 +10,6 @@ public record UpdateUserInformationPayload(
         String gender,
         String nationality,
         String email,
-        String studyDegree,
         String studyProgram,
         Instant enrolledAt,
         String specialSkills,

@@ -69,7 +69,7 @@ const ApplicationsTable = (props: IApplicationsTableProps) => {
     },
     thesis_type: {
       accessor: 'thesisType',
-      title: 'Thesis Type',
+      title: 'CILE Format',
       ellipsis: true,
       width: 150,
       render: (application) => formatThesisType(application.thesisType),

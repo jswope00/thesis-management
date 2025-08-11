@@ -92,16 +92,6 @@ const ThesisWritingSection = () => {
       .filter(([, value]) => value.required)
       .some(([key]) => !customFiles[key])
 
-  const thesisSubmissionReminder = (
-    <>
-      This is not the official submission website. Please also make sure to submit your thesis{' '}
-      <a href='https://portal.cit.tum.de/' target='_blank' rel='noopener noreferrer'>
-        here
-      </a>
-      .
-    </>
-  )
-
   return (
     <Accordion variant='separated' defaultValue='open'>
       <Accordion.Item value='open'>
@@ -293,26 +283,13 @@ const ThesisWritingSection = () => {
             </Accordion.Item>
           </Accordion>
 
-          {access.student && (
-            <Alert
-              variant='light'
-              color='orange'
-              title='Important'
-              icon={<WarningCircle size={16} />}
-              mt='md'
-            >
-              {thesisSubmissionReminder}
-            </Alert>
-          )}
+
 
           <Stack mt='md'>
             {access.student && thesis.state === ThesisState.WRITING && (
               <ConfirmationButton
                 confirmationTitle='Final Submission'
                 confirmationText='Are you sure you want to submit your thesis? This action cannot be undone.'
-                confirmationAdditionalInformation={
-                  access.student ? <Text c='red'>{thesisSubmissionReminder}</Text> : undefined
-                }
                 ml='auto'
                 onClick={onFinalSubmission}
                 disabled={!requiredFilesUploaded}

@@ -29,7 +29,7 @@ const SelectTopicStep = (props: ISelectTopicStepProps) => {
 
   return (
     <Stack>
-      <TopicsFilters visible={['type']} />
+      
       {!topics && (
         <Stack>
           <Skeleton height={48} />
@@ -46,14 +46,9 @@ const SelectTopicStep = (props: ISelectTopicStepProps) => {
           </TopicAccordionItem>
         ))}
         {GLOBAL_CONFIG.allow_suggested_topics && (
-          <Accordion.Item value='custom'>
-            <Accordion.Control>Suggest Topic</Accordion.Control>
-            <Accordion.Panel>
-              <Center>
-                <Button onClick={() => onComplete(undefined)}>Suggest your own topic</Button>
-              </Center>
-            </Accordion.Panel>
-          </Accordion.Item>
+          <Center mt="md">
+            <Button onClick={() => onComplete(undefined)}>Submit CILE Introduction</Button>
+          </Center>
         )}
       </Accordion>
     </Stack>

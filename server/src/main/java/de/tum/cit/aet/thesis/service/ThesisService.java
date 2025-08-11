@@ -519,7 +519,7 @@ public class ThesisService {
         PDFBuilder builder = new PDFBuilder("Assessment of \"" + thesis.getTitle() + "\"");
 
         builder
-                .addData("Thesis Type", DataFormatter.formatConstantName(thesis.getType()))
+                .addData("CILE Format", DataFormatter.formatConstantName(thesis.getType()))
                 .addData("Student", students)
                 .addData("Advisor", advisors)
                 .addData("Supervisor", supervisors)

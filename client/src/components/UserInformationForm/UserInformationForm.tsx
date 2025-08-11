@@ -1,26 +1,20 @@
 import { isEmail, isNotEmpty, useForm } from '@mantine/form'
 import { IUpdateUserInformationPayload } from '../../requests/payloads/user'
 import {
-  Anchor,
   Button,
-  Checkbox,
   Group,
-  NumberInput,
   Select,
   Stack,
   TextInput,
 } from '@mantine/core'
 import { useAuthenticationContext, useLoggedInUser } from '../../hooks/authentication'
 import { GLOBAL_CONFIG } from '../../config/global'
-import { AVAILABLE_COUNTRIES } from '../../config/countries'
 import UploadArea from '../UploadArea/UploadArea'
 import { useEffect, useState } from 'react'
-import DocumentEditor from '../DocumentEditor/DocumentEditor'
 import { useApiPdfFile } from '../../hooks/fetcher'
 import { showSimpleError } from '../../utils/notification'
 import { getHtmlTextLength } from '../../utils/validation'
 import { enrollmentDateToSemester, semesterToEnrollmentDate } from '../../utils/converter'
-import { Link } from 'react-router'
 import AvatarInput from './components/AvatarInput/AvatarInput'
 
 interface IUserInformationFormProps {
@@ -28,6 +22,7 @@ interface IUserInformationFormProps {
   includeAvatar?: boolean
   onComplete?: () => unknown
 }
+
 
 const UserInformationForm = (props: IUserInformationFormProps) => {
   const { requireCompletion, includeAvatar, onComplete } = props
@@ -37,7 +32,7 @@ const UserInformationForm = (props: IUserInformationFormProps) => {
 
   const form = useForm<
     Omit<IUpdateUserInformationPayload, 'enrolledAt'> & {
-      semester: string
+      graduationYear: string
       researchGroupName: string | null
       customData: Record<string, string>
       declarationOfConsentAccepted: boolean
@@ -55,9 +50,8 @@ const UserInformationForm = (props: IUserInformationFormProps) => {
       lastName: '',
       gender: '',
       nationality: '',
-      studyDegree: '',
       studyProgram: '',
-      semester: '',
+      graduationYear: '',
       researchGroupName: '',
       specialSkills: '',
       projects: '',
@@ -79,50 +73,13 @@ const UserInformationForm = (props: IUserInformationFormProps) => {
       firstName: requireCompletion ? isNotEmpty('Please state your first name') : undefined,
       lastName: requireCompletion ? isNotEmpty('Please state your last name') : undefined,
       email: requireCompletion ? isEmail('Invalid email') : undefined,
-      gender: requireCompletion ? isNotEmpty('Please state your gender') : undefined,
-      nationality: requireCompletion ? isNotEmpty('Please state your nationality') : undefined,
-      studyDegree: requireCompletion ? isNotEmpty('Please state your study degree') : undefined,
-      studyProgram: requireCompletion ? isNotEmpty('Please state your study program') : undefined,
-      semester: requireCompletion ? isNotEmpty('Please state your semester date') : undefined,
-      specialSkills: (value) => {
-        if (!value && requireCompletion) {
-          return 'Please state your special skills.'
-        } else if (getHtmlTextLength(value) > 1000) {
-          return 'The maximum allowed number of characters is 1000'
-        }
-      },
-      interests: (value) => {
-        if (!value && requireCompletion) {
-          return 'Please state your interests.'
-        } else if (getHtmlTextLength(value) > 1000) {
-          return 'The maximum allowed number of characters is 1000'
-        }
-      },
-      projects: (value) => {
-        if (!value && requireCompletion) {
-          return 'Please state your projects.'
-        } else if (getHtmlTextLength(value) > 1000) {
-          return 'The maximum allowed number of characters is 1000'
-        }
-      },
-      declarationOfConsentAccepted: (value) => !value,
+      studyProgram: requireCompletion ? isNotEmpty('Please select your study program') : undefined,
+      graduationYear: requireCompletion ? isNotEmpty('Please select your expected graduation year') : undefined,
       examinationReport: (value) => {
         if (!value && requireCompletion) {
           return 'Please upload your examination report'
         } else if (value && value.size > 2 * 1024 ** 3) {
           return 'The examination report should not exceed 2mb'
-        }
-      },
-      cv: (value) => {
-        if (!value && requireCompletion) {
-          return 'Please upload your CV.'
-        } else if (value && value.size > 2 * 1024 ** 3) {
-          return 'The CV should not exceed 2mb'
-        }
-      },
-      degreeReport: (value) => {
-        if (value && value.size > 2 * 1024 ** 3) {
-          return 'The bachelor report should not exceed 2mb'
         }
       },
       ...Object.fromEntries(
@@ -146,9 +103,8 @@ const UserInformationForm = (props: IUserInformationFormProps) => {
       lastName: user?.lastName || '',
       gender: user?.gender || '',
       nationality: user?.nationality || '',
-      studyDegree: user?.studyDegree || '',
       studyProgram: user?.studyProgram || '',
-      semester: user?.enrolledAt ? enrollmentDateToSemester(user.enrolledAt).toString() : '',
+      graduationYear: user?.enrolledAt ? enrollmentDateToSemester(user.enrolledAt).toString() : '',
       researchGroupName: user?.researchGroupName || '',
       specialSkills: user?.specialSkills || '',
       interests: user?.interests || '',
@@ -191,9 +147,8 @@ const UserInformationForm = (props: IUserInformationFormProps) => {
               gender: values.gender || null,
               nationality: values.nationality || null,
               email: values.email || null,
-              studyDegree: values.studyDegree || null,
               studyProgram: values.studyProgram || null,
-              enrolledAt: semesterToEnrollmentDate(values.semester),
+              enrolledAt: semesterToEnrollmentDate(values.graduationYear),
               specialSkills: values.specialSkills || null,
               interests: values.interests || null,
               projects: values.projects || null,
@@ -256,65 +211,29 @@ const UserInformationForm = (props: IUserInformationFormProps) => {
             {...form.getInputProps('lastName')}
           />
         </Group>
+
         <Group grow align='flex-start'>
           <Select
-            label='Gender'
-            placeholder='Gender'
-            data={Object.keys(GLOBAL_CONFIG.genders).map((key) => {
-              return {
-                label: GLOBAL_CONFIG.genders[key],
-                value: key,
-              }
-            })}
-            required={requireCompletion}
-            searchable={true}
-            {...form.getInputProps('gender')}
-          />
-          <Select
-            label='Nationality'
-            placeholder='Nationality'
-            data={Object.entries(AVAILABLE_COUNTRIES).map(([key, value]) => {
-              return {
-                label: value,
-                value: key,
-              }
-            })}
-            required={requireCompletion}
-            searchable={true}
-            {...form.getInputProps('nationality')}
-          />
-        </Group>
-        <Group grow align='flex-start'>
-          <Select
-            label='Current Study Degree'
-            placeholder='Study Degree'
-            data={Object.keys(GLOBAL_CONFIG.study_degrees).map((key) => {
-              return {
-                label: GLOBAL_CONFIG.study_degrees[key],
-                value: key,
-              }
-            })}
-            required={requireCompletion}
-            searchable={true}
-            {...form.getInputProps('studyDegree')}
-          />
-          <Select
-            label='Study Program'
-            placeholder='Study Program'
-            data={Object.keys(GLOBAL_CONFIG.study_programs).map((key) => {
-              return {
-                label: GLOBAL_CONFIG.study_programs[key],
-                value: key,
-              }
-            })}
+            label='Incoming Term'
+            placeholder='Select Incoming Term'
+            data={Object.entries(GLOBAL_CONFIG.study_programs).map(([key, value]) => ({
+              label: value,
+              value: key,
+            }))}
             required={requireCompletion}
             searchable={true}
             {...form.getInputProps('studyProgram')}
           />
-          <NumberInput
+          <Select
+            label='Expected Graduation Year'
+            placeholder='Select Graduation Year'
+            data={Object.entries(GLOBAL_CONFIG.graduation_years).map(([key, value]) => ({
+              label: value,
+              value: key,
+            }))}
             required={requireCompletion}
-            label='Semester in Current Study Program'
-            {...form.getInputProps('semester')}
+            searchable={true}
+            {...form.getInputProps('graduationYear')}
           />
         </Group>
         {user?.researchGroupName && (
@@ -333,66 +252,15 @@ const UserInformationForm = (props: IUserInformationFormProps) => {
             {...form.getInputProps(`customData.${key}`)}
           />
         ))}
-        <DocumentEditor
-          label='Interests (What are you interested in?)'
-          maxLength={1000}
-          required={requireCompletion}
-          editMode={true}
-          {...form.getInputProps('interests')}
-        />
-        <DocumentEditor
-          label='Projects (What projects have you worked on?)'
-          maxLength={1000}
-          required={requireCompletion}
-          editMode={true}
-          {...form.getInputProps('projects')}
-        />
-        <DocumentEditor
-          label='Special Skills (Programming languages, certificates, etc.)'
-          maxLength={1000}
-          required={requireCompletion}
-          editMode={true}
-          {...form.getInputProps('specialSkills')}
-        />
         <UploadArea
-          label='Examination Report'
+          label='Upload Draft CILE Introduction'
           required={requireCompletion}
           value={form.values.examinationReport}
           onChange={(file) => form.setFieldValue('examinationReport', file)}
           maxSize={2 * 1024 * 1024}
           accept='pdf'
         />
-        <UploadArea
-          label='CV'
-          required={requireCompletion}
-          value={form.values.cv}
-          onChange={(file) => form.setFieldValue('cv', file)}
-          maxSize={2 * 1024 * 1024}
-          accept='pdf'
-        />
-        {form.values.studyDegree !== 'BACHELOR' && (
-          <UploadArea
-            label='Bachelor Report'
-            required={requireCompletion}
-            value={form.values.degreeReport}
-            onChange={(file) => form.setFieldValue('degreeReport', file)}
-            maxSize={2 * 1024 * 1024}
-            accept='pdf'
-          />
-        )}
-        <Checkbox
-          mt='md'
-          label={
-            <>
-              I have read the{' '}
-              <Anchor component={Link} to='/privacy'>
-                privacy notice
-              </Anchor>{' '}
-              and agree to the processing of my data.
-            </>
-          }
-          {...form.getInputProps('declarationOfConsentAccepted', { type: 'checkbox' })}
-        />
+
         <Group>
           <Button type='submit' ml='auto' disabled={!form.isValid()} loading={loading}>
             Update Information

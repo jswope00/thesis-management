@@ -13,7 +13,7 @@ import { usePageTitle } from '../../hooks/theme'
 const ReplaceApplicationPage = () => {
   const { topicId, applicationId } = useParams<{ topicId: string; applicationId: string }>()
 
-  usePageTitle('Submit Application')
+  usePageTitle('Submit CILE Introduction')
 
   const [application, setApplication] = useState<IApplication>()
 
@@ -58,7 +58,7 @@ const ReplaceApplicationPage = () => {
     <Stack>
       <Title>{applicationId ? 'Edit Application' : 'Submit Application'}</Title>
       <Stepper active={Math.max(step, topicId || applicationId ? 1 : 0)} onStepClick={updateStep}>
-        <Stepper.Step label='First Step' description='Select Topic'>
+        <Stepper.Step label='First Step' description='Start Submission'>
           <TopicsProvider limit={100}>
             <SelectTopicStep
               onComplete={(x) => {
@@ -68,10 +68,10 @@ const ReplaceApplicationPage = () => {
             />
           </TopicsProvider>
         </Stepper.Step>
-        <Stepper.Step label='Second step' description='Update Information'>
+        <Stepper.Step label='Second step' description='Update User Information'>
           <StudentInformationStep onComplete={() => setStep(2)} />
         </Stepper.Step>
-        <Stepper.Step label='Final step' description='Submit your Application'>
+        <Stepper.Step label='Final step' description='Submit your Draft CILE Introduction'>
           <MotivationStep
             onComplete={() => setStep(3)}
             topic={topic || undefined}
@@ -84,11 +84,11 @@ const ReplaceApplicationPage = () => {
               <Stack gap='sm'>
                 <Text ta='center'>
                   {application
-                    ? 'Your application was successfully updated!'
-                    : 'Your application was successfully submitted!'}
+                    ? 'Your CILE Introduction was successfully updated!'
+                    : 'Your CILE Introduction was successfully submitted!'}
                 </Text>
                 <Text ta='center' size='sm' c='muted'>
-                  We will contact you as soon as we have reviewed your application.
+                  We will notified when there is feedback on your CILE Introduction.
                 </Text>
               </Stack>
             </Card>

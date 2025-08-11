@@ -113,7 +113,6 @@ public class AuthenticationService {
             String gender,
             String nationality,
             String email,
-            String studyDegree,
             String studyProgram,
             Instant enrolledAt,
             String specialSkills,
@@ -131,7 +130,6 @@ public class AuthenticationService {
         user.setGender(gender);
         user.setNationality(nationality);
         user.setEmail(email);
-        user.setStudyDegree(studyDegree);
         user.setStudyProgram(studyProgram);
         user.setEnrolledAt(enrolledAt);
         user.setSpecialSkills(specialSkills);

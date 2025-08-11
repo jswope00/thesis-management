@@ -58,7 +58,7 @@ const ApplicationsFilters = (props: IApplicationsFiltersProps) => {
         <MultiSelect
           hidePickedOptions
           label='Type'
-          placeholder='Thesis Types'
+          placeholder='CILE Formats'
           data={Object.keys(GLOBAL_CONFIG.thesis_types).map((key) => ({
             value: key,
             label: formatThesisType(key),

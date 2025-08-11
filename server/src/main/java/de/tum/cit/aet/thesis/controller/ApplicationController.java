@@ -57,7 +57,7 @@ public class ApplicationController {
         }
 
         if (applicationService.applicationExists(authenticatedUser, payload.topicId())) {
-            throw new ResourceAlreadyExistsException("There is already a pending application for this topic. Please edit your application in the dashboard.");
+            throw new ResourceAlreadyExistsException("You have already submitted a CILE Introduction. Please edit your introduction in the dashboard.");
         }
 
         Application application = applicationService.createApplication(authenticatedUser,

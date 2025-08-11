@@ -252,7 +252,7 @@ const ThesisConfigSection = () => {
                 {...form.getInputProps('title')}
               />
               <Select
-                label='Thesis Type'
+                label='CILE Format'
                 required={true}
                 disabled={!access.advisor}
                 data={Object.keys(GLOBAL_CONFIG.thesis_types).map((key) => ({

@@ -54,8 +54,8 @@ const TopicsTable = (props: ITopicsTableProps) => {
     },
     types: {
       accessor: 'thesisTypes',
-      title: 'Thesis Types',
-      width: 180,
+      title: 'CILE Formats',
+      width: 150,
       ellipsis: true,
       render: (topic) => (
         <Stack gap={2}>

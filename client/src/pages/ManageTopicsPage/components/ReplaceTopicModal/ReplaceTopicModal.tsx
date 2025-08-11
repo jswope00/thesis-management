@@ -184,8 +184,8 @@ const ReplaceTopicModal = (props: ICreateTopicModalProps) => {
         <Stack gap='md'>
           <TextInput label='Title' required {...form.getInputProps('title')} />
           <MultiSelect
-            label='Thesis Types'
-            placeholder={form.values.thesisTypes.length > 0 ? undefined : 'All Thesis Types'}
+            label='CILE Formats'
+            placeholder={form.values.thesisTypes.length > 0 ? undefined : 'All CILE Formats'}
             data={Object.keys(GLOBAL_CONFIG.thesis_types).map((key) => ({
               value: key,
               label: formatThesisType(key),

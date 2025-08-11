@@ -51,7 +51,7 @@ const CreateThesisModal = (props: ICreateThesisModalProps) => {
     validateInputOnBlur: true,
     validate: {
       title: isNotEmpty('Thesis title must not be empty'),
-      type: isNotEmpty('Thesis type must not be empty'),
+      type: isNotEmpty('CILE Format must not be empty'),
       language: isNotEmpty('Thesis language must not be empty'),
       students: isNotEmptyUserList('student'),
       advisors: isNotEmptyUserList('advisor'),
@@ -142,7 +142,7 @@ const CreateThesisModal = (props: ICreateThesisModalProps) => {
             {...form.getInputProps('title')}
           />
           <Select
-            label='Thesis Type'
+            label='CILE Format'
             required={true}
             data={Object.keys(GLOBAL_CONFIG.thesis_types).map((key) => ({
               value: key,

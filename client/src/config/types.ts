@@ -9,6 +9,7 @@ export interface IGlobalConfig {
   server_host: string
 
   genders: Record<string, string>
+  graduation_years: Record<string, string>
   study_programs: Record<string, string>
   study_degrees: Record<string, string>
   languages: Record<string, string>

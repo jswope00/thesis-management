@@ -57,7 +57,7 @@ const DashboardPage = () => {
                 My CILE Proposals
               </Title>
               <Center>
-                <Button mb='md' component={Link} to='/applications/thesis'>
+                <Button mb='md' component={Link} to='/submit-application'>
                   New CILE Proposal
                 </Button>
               </Center>

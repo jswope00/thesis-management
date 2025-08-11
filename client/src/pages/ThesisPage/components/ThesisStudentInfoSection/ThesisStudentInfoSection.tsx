@@ -99,20 +99,6 @@ const ThesisStudentInfoSection = () => {
                       />
                     </Grid.Col>
                   )}
-                  {user.data.studyProgram && user.data.studyDegree && (
-                    <Grid.Col span={{ md: 2 }}>
-                      <LabeledItem
-                        label='Study Degree'
-                        value={`${
-                          GLOBAL_CONFIG.study_programs[user.data.studyProgram || ''] ??
-                          user.data.studyProgram
-                        } ${
-                          GLOBAL_CONFIG.study_degrees[user.data.studyDegree || ''] ??
-                          user.data.studyDegree
-                        } `}
-                      />
-                    </Grid.Col>
-                  )}
                   {user.data.customData &&
                     Object.entries(user.data.customData).map(([key, value]) => (
                       <Grid.Col key={key} span={{ md: 6 }}>
