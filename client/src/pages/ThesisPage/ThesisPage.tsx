@@ -2,6 +2,7 @@ import { usePageTitle } from '../../hooks/theme'
 import ThesisConfigSection from './components/ThesisConfigSection/ThesisConfigSection'
 import ThesisInfoSection from './components/ThesisInfoSection/ThesisInfoSection'
 import ThesisProposalSection from './components/ThesisProposalSection/ThesisProposalSection'
+import ThesisResearchSection from './components/ThesisResearchSection/ThesisResearchSection'
 import ThesisWritingSection from './components/ThesisWritingSection/ThesisWritingSection'
 import ThesisAssessmentSection from './components/ThesisAssessmentSection/ThesisAssessmentSection'
 import ThesisFinalGradeSection from './components/ThesisFinalGradeSection/ThesisFinalGradeSection'
@@ -27,6 +28,7 @@ const ThesisPage = () => {
         <ThesisAdvisorCommentsSection />
         <ThesisInfoSection />
         <ThesisProposalSection />
+        <ThesisResearchSection />
         <ThesisWritingSection />
         <ThesisPresentationSection />
         <ThesisAssessmentSection />

@@ -7,6 +7,7 @@ import lombok.Getter;
 @Getter
 public enum ThesisState {
     PROPOSAL("PROPOSAL"),
+    RESEARCH("RESEARCH"),
     WRITING("WRITING"),
     SUBMITTED("SUBMITTED"),
     ASSESSED("ASSESSED"),

@@ -652,7 +652,55 @@ You can find the submitted file in the attachment part of this email.
 <div style="text-align: center;font-size: 10px">
     Manage your notification settings <a th:href="${config.clientHost + ''/settings/notifications''}">here</a>
 </div>
-<br/><br/>', 'Student uploaded new proposal')) AS v(template_case, subject, body_html, description))
+<br/><br/>', 'Student uploaded new proposal'), ('THESIS_RESEARCH_UPLOADED', 'Thesis Research Methods Added', '<p th:inline="text">Dear [[${recipient.firstName}]],</p>
+
+<p th:inline="text">
+[[${research.createdBy.firstName}]] [[${research.createdBy.lastName}]] uploaded research methods to thesis "[[${thesis.title}]]".
+You can find the submitted file in the attachment part of this email.
+</p>
+
+<p th:inline="text">
+    Full Details: <a target="_blank" rel="noopener noreferrer nofollow" th:href="${thesisUrl}" th:text="${thesisUrl}"></a>
+</p>
+
+<hr/>
+<div style="text-align: center;font-size: 10px">
+    Manage your notification settings <a th:href="${config.clientHost + ''/settings/notifications''}">here</a>
+</div>
+<br/><br/>', 'Student uploaded new research methods'), ('THESIS_RESEARCH_ACCEPTED', 'Thesis Research Methods Accepted', '<p th:inline="text">Dear [[${recipient.firstName}]],</p>
+
+<p th:inline="text">
+[[${research.approvedBy.firstName}]] [[${research.approvedBy.lastName}]] approved the research methods of thesis "[[${thesis.title}]]".
+The next step is to start with the project work and with writing the thesis.
+You can see your submission deadline on <a target="_blank" rel="noopener noreferrer nofollow" th:href="${thesisUrl}">[[${thesisUrl}]]</a>.
+</p>
+
+<hr/>
+<div style="text-align: center;font-size: 10px">
+    Manage your notification settings <a th:href="${config.clientHost + ''/settings/notifications''}">here</a>
+</div>
+<br/><br/>', 'Research methods were accepted'), ('THESIS_RESEARCH_REJECTED', 'Changes were requested for Research Methods', '<p th:inline="text">Dear [[${recipient.firstName}]],</p>
+
+<p th:inline="text">
+[[${reviewingUser.firstName}]] [[${reviewingUser.lastName}]] reviewed your research methods for thesis "[[${thesis.title}]]".
+</p>
+
+<p th:inline="text">
+The following changes were requested:<br />
+<ul>
+<li th:each="requestedChange : ${requestedChanges}" th:text="${requestedChange}"></li>
+</ul>
+</p>
+
+<p th:inline="text">
+    Full Details: <a target="_blank" rel="noopener noreferrer nofollow" th:href="${thesisUrl}" th:text="${thesisUrl}"></a>
+</p>
+
+<hr/>
+<div style="text-align: center;font-size: 10px">
+    Manage your notification settings <a th:href="${config.clientHost + ''/settings/notifications''}">here</a>
+</div>
+<br/><br/>', 'Changes were requested for research methods')) AS v(template_case, subject, body_html, description))
 INSERT
 INTO email_templates (email_template_id,
                       research_group_id,

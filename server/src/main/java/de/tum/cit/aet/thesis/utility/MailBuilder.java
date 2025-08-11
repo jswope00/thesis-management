@@ -274,6 +274,14 @@ public class MailBuilder {
         return this;
     }
 
+    public MailBuilder fillThesisResearchPlaceholders(ThesisResearch research) {
+        fillThesisPlaceholders(research.getThesis());
+
+        fillPlaceholder("research", ThesisDto.ThesisResearchDto.fromResearchEntity(research));
+
+        return this;
+    }
+
     public MailBuilder fillThesisAssessmentPlaceholders(ThesisAssessment assessment) {
         fillThesisPlaceholders(assessment.getThesis());
 

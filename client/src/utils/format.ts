@@ -110,6 +110,7 @@ export function formatApplicationFilename(
 export function formatThesisState(state: ThesisState) {
   const stateMap: Record<ThesisState, string> = {
     [ThesisState.PROPOSAL]: 'Proposal',
+    [ThesisState.RESEARCH]: 'Research',
     [ThesisState.WRITING]: 'Writing',
     [ThesisState.SUBMITTED]: 'Submitted',
     [ThesisState.ASSESSED]: 'Assessed',

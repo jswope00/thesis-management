@@ -35,6 +35,7 @@ public class ThesisService {
     private final UserRepository userRepository;
     private final UploadService uploadService;
     private final ThesisProposalRepository thesisProposalRepository;
+    private final ThesisResearchRepository thesisResearchRepository;
     private final ThesisAssessmentRepository thesisAssessmentRepository;
     private final MailingService mailingService;
     private final AccessManagementService accessManagementService;
@@ -51,6 +52,7 @@ public class ThesisService {
             ThesisStateChangeRepository thesisStateChangeRepository,
             UserRepository userRepository,
             ThesisProposalRepository thesisProposalRepository,
+            ThesisResearchRepository thesisResearchRepository,
             ThesisAssessmentRepository thesisAssessmentRepository,
             UploadService uploadService,
             MailingService mailingService,
@@ -65,6 +67,7 @@ public class ThesisService {
         this.userRepository = userRepository;
         this.uploadService = uploadService;
         this.thesisProposalRepository = thesisProposalRepository;
+        this.thesisResearchRepository = thesisResearchRepository;
         this.thesisAssessmentRepository = thesisAssessmentRepository;
         this.mailingService = mailingService;
         this.accessManagementService = accessManagementService;
@@ -408,11 +411,81 @@ public class ThesisService {
 
         thesisProposalRepository.save(proposal);
 
+        saveStateChange(thesis, ThesisState.RESEARCH);
+
+        thesis.setState(ThesisState.RESEARCH);
+
+        mailingService.sendProposalAcceptedEmail(proposal);
+
+        return thesisRepository.save(thesis);
+    }
+
+    /* RESEARCH */
+
+    public Resource getResearchFile(ThesisResearch research) {
+        currentUserProvider().assertCanAccessResearchGroup(research.getResearchGroup());
+        return uploadService.load(research.getResearchFilename());
+    }
+
+    @Transactional
+    public Thesis uploadResearch(Thesis thesis, MultipartFile researchFile) {
+        currentUserProvider().assertCanAccessResearchGroup(thesis.getResearchGroup());
+        ThesisResearch research = new ThesisResearch();
+
+        research.setThesis(thesis);
+        research.setResearchFilename(uploadService.store(researchFile, 25 * 1024 * 1024, UploadFileType.PDF));
+        research.setCreatedAt(Instant.now());
+        research.setCreatedBy(currentUserProvider().getUser());
+
+        List<ThesisResearch> researchList = thesis.getResearch() == null ? new ArrayList<>() : thesis.getResearch();
+        researchList.addFirst(research);
+
+        thesis.setResearch(researchList);
+
+        thesisResearchRepository.save(research);
+
+        mailingService.sendResearchUploadedEmail(research);
+
+        return thesisRepository.save(thesis);
+    }
+
+    @Transactional
+    public Thesis deleteResearch(Thesis thesis, UUID researchId) {
+        currentUserProvider().assertCanAccessResearchGroup(thesis.getResearchGroup());
+        thesis.getResearchById(researchId)
+                .orElseThrow(() -> new ResourceNotFoundException("Research id not found"));
+
+        thesisResearchRepository.deleteById(researchId);
+
+        thesis.setResearch(new ArrayList<>(
+                thesis.getResearch().stream().filter(research -> !research.getId().equals(researchId)).toList()
+        ));
+
+        return thesis;
+    }
+
+    @Transactional
+    public Thesis acceptResearch(Thesis thesis, Integer grade) {
+        currentUserProvider().assertCanAccessResearchGroup(thesis.getResearchGroup());
+        List<ThesisResearch> researchList = thesis.getResearch();
+
+        if (researchList == null || researchList.isEmpty()) {
+            throw new ResourceNotFoundException("No research added to thesis yet");
+        }
+
+        ThesisResearch research = researchList.getFirst();
+
+        research.setApprovedAt(Instant.now());
+        research.setApprovedBy(currentUserProvider().getUser());
+        research.setGrade(grade);
+
+        thesisResearchRepository.save(research);
+
         saveStateChange(thesis, ThesisState.WRITING);
 
         thesis.setState(ThesisState.WRITING);
 
-        mailingService.sendProposalAcceptedEmail(proposal);
+        mailingService.sendResearchAcceptedEmail(research);
 
         return thesisRepository.save(thesis);
     }

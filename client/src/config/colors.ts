@@ -4,6 +4,7 @@ import { GLOBAL_CONFIG } from './global'
 
 export const ThesisStateColor: Record<ThesisState, string> = {
   [ThesisState.PROPOSAL]: '#FFB347',
+  [ThesisState.RESEARCH]: '#FF6B6B',
   [ThesisState.WRITING]: '#4A69BD',
   [ThesisState.SUBMITTED]: '#1E3799',
   [ThesisState.ASSESSED]: '#F8C291',

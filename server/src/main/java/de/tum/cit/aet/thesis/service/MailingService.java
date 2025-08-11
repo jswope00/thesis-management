@@ -206,6 +206,36 @@ public class MailingService {
                 .send(javaMailSender, uploadService);
     }
 
+    public void sendResearchUploadedEmail(ThesisResearch research) {
+        EmailTemplate emailTemplate = loadTemplate(
+            research.getResearchGroup().getId(),
+            "THESIS_RESEARCH_UPLOADED",
+            "en");
+        MailBuilder mailBuilder = new MailBuilder(config, emailTemplate.getSubject(), emailTemplate.getBodyHtml());
+        mailBuilder
+                .addPrimarySender(research.getCreatedBy())
+                .sendToThesisAdvisors(research.getThesis())
+                .addNotificationName(NOTIFICATION_NAME_START + research.getThesis().getId())
+                .fillThesisResearchPlaceholders(research)
+                .addStoredAttachment(research.getResearchFilename(), getThesisFilename(research.getThesis(), "Research Methods", research.getResearchFilename()))
+                .send(javaMailSender, uploadService);
+    }
+
+    public void sendResearchAcceptedEmail(ThesisResearch research) {
+        EmailTemplate emailTemplate = loadTemplate(
+                research.getResearchGroup().getId(),
+                "THESIS_RESEARCH_ACCEPTED",
+                "en");
+        MailBuilder mailBuilder = new MailBuilder(config, emailTemplate.getSubject(), emailTemplate.getBodyHtml());
+        mailBuilder
+                .addPrimarySender(research.getApprovedBy())
+                .sendToThesisStudents(research.getThesis())
+                .addNotificationName(NOTIFICATION_NAME_START + research.getThesis().getId())
+                .fillThesisPlaceholders(research.getThesis())
+                .fillThesisResearchPlaceholders(research)
+                .send(javaMailSender, uploadService);
+    }
+
     public void sendNewCommentEmail(ThesisComment comment) {
         EmailTemplate emailTemplate = loadTemplate(
                 comment.getResearchGroup().getId(),

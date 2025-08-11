@@ -3,6 +3,7 @@ import { ILightUser } from './user'
 
 export enum ThesisState {
   PROPOSAL = 'PROPOSAL',
+  RESEARCH = 'RESEARCH',
   WRITING = 'WRITING',
   SUBMITTED = 'SUBMITTED',
   ASSESSED = 'ASSESSED',
@@ -65,6 +66,15 @@ export interface IThesis {
   }
   proposals: Array<{
     proposalId: string
+    filename: string
+    createdAt: string
+    createdBy: ILightUser
+    approvedAt: string | null
+    approvedBy: ILightUser | null
+    grade: number | null
+  }>
+  research: Array<{
+    researchId: string
     filename: string
     createdAt: string
     createdBy: ILightUser

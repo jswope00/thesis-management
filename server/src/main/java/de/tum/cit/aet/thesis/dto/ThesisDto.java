@@ -12,6 +12,7 @@ import de.tum.cit.aet.thesis.entity.ThesisFeedback;
 import de.tum.cit.aet.thesis.entity.ThesisFile;
 import de.tum.cit.aet.thesis.entity.ThesisPresentation;
 import de.tum.cit.aet.thesis.entity.ThesisProposal;
+import de.tum.cit.aet.thesis.entity.ThesisResearch;
 import de.tum.cit.aet.thesis.entity.ThesisStateChange;
 import de.tum.cit.aet.thesis.entity.jsonb.ThesisMetadata;
 import java.time.Instant;
@@ -40,6 +41,7 @@ public record ThesisDto(
 
     ThesisAssessmentDto assessment,
     List<ThesisProposalDto> proposals,
+    List<ThesisResearchDto> research,
     List<ThesisFeedbackDto> feedback,
     List<ThesisFilesDto> files,
     ThesisGradeDto grade,
@@ -84,6 +86,7 @@ public record ThesisDto(
     }
 
     List<ThesisProposal> proposals = thesis.getProposals();
+    List<ThesisResearch> research = thesis.getResearch();
     List<ThesisAssessment> assessments = thesis.getAssessments();
     List<ThesisPresentation> presentations = thesis.getPresentations();
 
@@ -106,6 +109,7 @@ public record ThesisDto(
         advisorAccess && !assessments.isEmpty()
             ? ThesisDto.ThesisAssessmentDto.fromAssessmentEntity(assessments.getFirst()) : null,
         proposals.stream().map(ThesisProposalDto::fromProposalEntity).toList(),
+        research.stream().map(ThesisResearchDto::fromResearchEntity).toList(),
         thesis.getFeedback().stream().map(ThesisFeedbackDto::fromThesisFeedbackEntity).toList(),
         thesis.getFiles().stream().map(ThesisFilesDto::fromThesisFileEntity).toList(),
         studentAccess ? ThesisGradeDto.fromThesisEntity(thesis) : null,
@@ -165,6 +169,33 @@ public record ThesisDto(
           proposal.getApprovedAt(),
           LightUserDto.fromUserEntity(proposal.getApprovedBy()),
           proposal.getGrade()
+      );
+    }
+  }
+
+  public record ThesisResearchDto(
+      UUID researchId,
+      String filename,
+      Instant createdAt,
+      LightUserDto createdBy,
+      Instant approvedAt,
+      LightUserDto approvedBy,
+      Integer grade
+  ) {
+
+    public static ThesisResearchDto fromResearchEntity(ThesisResearch research) {
+      if (research == null) {
+        return null;
+      }
+
+      return new ThesisResearchDto(
+          research.getId(),
+          research.getResearchFilename(),
+          research.getCreatedAt(),
+          LightUserDto.fromUserEntity(research.getCreatedBy()),
+          research.getApprovedAt(),
+          LightUserDto.fromUserEntity(research.getApprovedBy()),
+          research.getGrade()
       );
     }
   }

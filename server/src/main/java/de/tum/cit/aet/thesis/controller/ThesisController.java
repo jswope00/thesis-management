@@ -309,6 +309,7 @@ public class ThesisController {
     }
 
     @PostMapping("/{thesisId}/proposal")
+    @PreAuthorize("hasAnyRole('admin', 'advisor', 'supervisor', 'student')")
     public ResponseEntity<ThesisDto> uploadProposal(
             @PathVariable UUID thesisId,
             @RequestPart("proposal") MultipartFile proposalFile
@@ -330,6 +331,7 @@ public class ThesisController {
     }
 
     @PutMapping("/{thesisId}/proposal/accept")
+    @PreAuthorize("hasAnyRole('admin', 'advisor', 'supervisor')")
     public ResponseEntity<ThesisDto> acceptProposal(
             @PathVariable UUID thesisId,
             @RequestBody AcceptProposalPayload payload
@@ -342,6 +344,87 @@ public class ThesisController {
         }
 
         thesis = thesisService.acceptProposal(thesis, payload.grade());
+
+        return ResponseEntity.ok(ThesisDto.fromThesisEntity(thesis, thesis.hasAdvisorAccess(currentUser), thesis.hasStudentAccess(currentUser)));
+    }
+
+    /* RESEARCH ENDPOINTS */
+
+    @GetMapping("/{thesisId}/research/{researchId}")
+    public ResponseEntity<Resource> getResearchFile(
+            @PathVariable UUID thesisId,
+            @PathVariable UUID researchId
+    ) {
+        User currentUser = currentUserProvider().getUser();
+        Thesis thesis = thesisService.findById(thesisId);
+
+        if (!thesis.hasReadAccess(currentUser)) {
+            throw new AccessDeniedException("You do not have the required permissions to view this thesis");
+        }
+
+        ThesisResearch research = thesis.getResearchById(researchId).orElseThrow();
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .cacheControl(CacheControl.maxAge(1, TimeUnit.DAYS).cachePublic())
+                .header(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=research_%s.pdf", thesisId))
+                .body(thesisService.getResearchFile(research));
+    }
+
+    @DeleteMapping("/{thesisId}/research/{researchId}")
+    @PreAuthorize("hasAnyRole('admin', 'advisor', 'supervisor')")
+    public ResponseEntity<ThesisDto> deleteResearch(
+            @PathVariable UUID thesisId,
+            @PathVariable UUID researchId
+    ) {
+        User currentUser = currentUserProvider().getUser();
+        Thesis thesis = thesisService.findById(thesisId);
+
+        if (!thesis.hasAdvisorAccess(currentUser)) {
+            throw new AccessDeniedException("You do not have the required permissions to delete this research");
+        }
+
+        thesis = thesisService.deleteResearch(thesis, researchId);
+
+        return ResponseEntity.ok(ThesisDto.fromThesisEntity(thesis, thesis.hasAdvisorAccess(currentUser), thesis.hasStudentAccess(currentUser)));
+    }
+
+    @PostMapping("/{thesisId}/research")
+    @PreAuthorize("hasAnyRole('admin', 'advisor', 'supervisor', 'student')")
+    public ResponseEntity<ThesisDto> uploadResearch(
+            @PathVariable UUID thesisId,
+            @RequestPart("research") MultipartFile researchFile
+    ) {
+        User currentUser = currentUserProvider().getUser();
+        Thesis thesis = thesisService.findById(thesisId);
+
+        if (!thesis.hasStudentAccess(currentUser)) {
+            throw new AccessDeniedException("You need to be a student of this thesis to add research methods");
+        }
+
+        if (thesis.getState() != ThesisState.RESEARCH && !thesis.hasAdvisorAccess(currentUser)) {
+            throw new AccessDeniedException("Only advisors can upload new research methods if thesis state is not RESEARCH");
+        }
+
+        thesis = thesisService.uploadResearch(thesis, RequestValidator.validateNotNull(researchFile));
+
+        return ResponseEntity.ok(ThesisDto.fromThesisEntity(thesis, thesis.hasAdvisorAccess(currentUser), thesis.hasStudentAccess(currentUser)));
+    }
+
+    @PutMapping("/{thesisId}/research/accept")
+    @PreAuthorize("hasAnyRole('admin', 'advisor', 'supervisor')")
+    public ResponseEntity<ThesisDto> acceptResearch(
+            @PathVariable UUID thesisId,
+            @RequestBody AcceptProposalPayload payload
+    ) {
+        User currentUser = currentUserProvider().getUser();
+        Thesis thesis = thesisService.findById(thesisId);
+
+        if (!thesis.hasAdvisorAccess(currentUser)) {
+            throw new AccessDeniedException("You need to be an advisor of this thesis to accept research methods");
+        }
+
+        thesis = thesisService.acceptResearch(thesis, payload.grade());
 
         return ResponseEntity.ok(ThesisDto.fromThesisEntity(thesis, thesis.hasAdvisorAccess(currentUser), thesis.hasStudentAccess(currentUser)));
     }

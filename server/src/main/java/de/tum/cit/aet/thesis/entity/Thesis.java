@@ -117,6 +117,10 @@ public class Thesis {
 
   @OneToMany(mappedBy = "thesis", fetch = FetchType.EAGER)
   @OrderBy("createdAt DESC")
+  private List<ThesisResearch> research = new ArrayList<>();
+
+  @OneToMany(mappedBy = "thesis", fetch = FetchType.EAGER)
+  @OrderBy("createdAt DESC")
   private List<ThesisAssessment> assessments = new ArrayList<>();
 
   @OneToMany(mappedBy = "thesis", fetch = FetchType.EAGER)
@@ -301,6 +305,16 @@ public class Thesis {
   public Optional<ThesisProposal> getProposalById(UUID proposalId) {
     for (ThesisProposal item : getProposals()) {
       if (item.getId().equals(proposalId)) {
+        return Optional.of(item);
+      }
+    }
+
+    return Optional.empty();
+  }
+
+  public Optional<ThesisResearch> getResearchById(UUID researchId) {
+    for (ThesisResearch item : getResearch()) {
+      if (item.getId().equals(researchId)) {
         return Optional.of(item);
       }
     }
