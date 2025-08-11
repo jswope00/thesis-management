@@ -35,6 +35,9 @@ public class ThesisProposal {
     @JoinColumn(name = "approved_by")
     private User approvedBy;
 
+    @Column(name = "grade")
+    private Integer grade;
+
     @CreationTimestamp
     @NotNull
     @Column(name = "created_at", nullable = false)

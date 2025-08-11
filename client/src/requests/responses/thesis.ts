@@ -70,6 +70,7 @@ export interface IThesis {
     createdBy: ILightUser
     approvedAt: string | null
     approvedBy: ILightUser | null
+    grade: number | null
   }>
   feedback: Array<{
     feedbackId: string

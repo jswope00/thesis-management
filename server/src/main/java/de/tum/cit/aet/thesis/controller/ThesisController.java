@@ -331,7 +331,8 @@ public class ThesisController {
 
     @PutMapping("/{thesisId}/proposal/accept")
     public ResponseEntity<ThesisDto> acceptProposal(
-            @PathVariable UUID thesisId
+            @PathVariable UUID thesisId,
+            @RequestBody AcceptProposalPayload payload
     ) {
         User currentUser = currentUserProvider().getUser();
         Thesis thesis = thesisService.findById(thesisId);
@@ -340,7 +341,7 @@ public class ThesisController {
             throw new AccessDeniedException("You need to be an advisor of this thesis to accept a proposal");
         }
 
-        thesis = thesisService.acceptProposal(thesis);
+        thesis = thesisService.acceptProposal(thesis, payload.grade());
 
         return ResponseEntity.ok(ThesisDto.fromThesisEntity(thesis, thesis.hasAdvisorAccess(currentUser), thesis.hasStudentAccess(currentUser)));
     }

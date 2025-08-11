@@ -148,7 +148,8 @@ public record ThesisDto(
       Instant createdAt,
       LightUserDto createdBy,
       Instant approvedAt,
-      LightUserDto approvedBy
+      LightUserDto approvedBy,
+      Integer grade
   ) {
 
     public static ThesisProposalDto fromProposalEntity(ThesisProposal proposal) {
@@ -162,7 +163,8 @@ public record ThesisDto(
           proposal.getCreatedAt(),
           LightUserDto.fromUserEntity(proposal.getCreatedBy()),
           proposal.getApprovedAt(),
-          LightUserDto.fromUserEntity(proposal.getApprovedBy())
+          LightUserDto.fromUserEntity(proposal.getApprovedBy()),
+          proposal.getGrade()
       );
     }
   }

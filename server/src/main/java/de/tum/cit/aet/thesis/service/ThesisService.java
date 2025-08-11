@@ -392,7 +392,7 @@ public class ThesisService {
     }
 
     @Transactional
-    public Thesis acceptProposal(Thesis thesis) {
+    public Thesis acceptProposal(Thesis thesis, Integer grade) {
         currentUserProvider().assertCanAccessResearchGroup(thesis.getResearchGroup());
         List<ThesisProposal> proposals = thesis.getProposals();
 
@@ -404,6 +404,7 @@ public class ThesisService {
 
         proposal.setApprovedAt(Instant.now());
         proposal.setApprovedBy(currentUserProvider().getUser());
+        proposal.setGrade(grade);
 
         thesisProposalRepository.save(proposal);
 

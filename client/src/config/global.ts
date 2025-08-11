@@ -42,9 +42,9 @@ const generateGraduationYears = () => {
 }
 
 export const GLOBAL_CONFIG: IGlobalConfig = {
-  title: getEnvironmentVariable('APPLICATION_TITLE') || 'ThesisManagement',
+  title: getEnvironmentVariable('APPLICATION_TITLE') || 'CILE Management',
 
-  chair_name: getEnvironmentVariable('CHAIR_NAME') || 'ThesisManagement',
+  chair_name: getEnvironmentVariable('CHAIR_NAME') || 'CILE Management',
   chair_url: getEnvironmentVariable('CHAIR_URL') || window.origin,
 
   allow_suggested_topics: (getEnvironmentVariable('ALLOW_SUGGESTED_TOPICS') || 'true') === 'true',

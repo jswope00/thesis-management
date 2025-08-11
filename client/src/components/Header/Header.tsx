@@ -40,7 +40,7 @@ const Header = ({ opened, toggle, authenticatedArea }: HeaderProps) => {
       >
         <Logo size={40} />
         <Text fw='bold' visibleFrom='sm' pt='2px'>
-          Thesis Management
+          CILE Management
         </Text>
       </Flex>
 
