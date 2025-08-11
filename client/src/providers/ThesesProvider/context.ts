@@ -6,6 +6,7 @@ export interface IThesesFilters {
   search?: string
   states?: ThesisState[]
   types?: string[]
+  advisorIds?: string[]
 }
 
 export interface IThesesSort {

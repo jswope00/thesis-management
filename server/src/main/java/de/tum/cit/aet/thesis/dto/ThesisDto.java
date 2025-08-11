@@ -106,7 +106,7 @@ public record ThesisDto(
         thesis.getEndDate(),
         thesis.getCreatedAt(),
         LightResearchGroupDto.fromResearchGroupEntity(thesis.getResearchGroup()),
-        advisorAccess && !assessments.isEmpty()
+        !assessments.isEmpty()
             ? ThesisDto.ThesisAssessmentDto.fromAssessmentEntity(assessments.getFirst()) : null,
         proposals.stream().map(ThesisProposalDto::fromProposalEntity).toList(),
         research.stream().map(ThesisResearchDto::fromResearchEntity).toList(),

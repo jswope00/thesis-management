@@ -63,7 +63,8 @@ public class ThesisController {
             @RequestParam(required = false, defaultValue = "50") Integer limit,
             @RequestParam(required = false, defaultValue = "createdAt") String sortBy,
             @RequestParam(required = false, defaultValue = "desc") String sortOrder,
-            @RequestParam(required = false, defaultValue = "") UUID[] researchGroupIds
+            @RequestParam(required = false, defaultValue = "") UUID[] researchGroupIds,
+            @RequestParam(required = false) UUID[] advisorIds
     ) {
         User currentUser = currentUserProvider().getUser();
 
@@ -77,7 +78,8 @@ public class ThesisController {
                 limit,
                 sortBy,
                 sortOrder,
-                researchGroupIds
+                researchGroupIds,
+                advisorIds
         );
 
         return ResponseEntity.ok(PaginationDto.fromSpringPage(

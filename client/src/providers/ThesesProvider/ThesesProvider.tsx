@@ -43,6 +43,7 @@ const ThesesProvider = (props: PropsWithChildren<IThesesProviderProps>) => {
           search: debouncedSearch,
           state: filters.states?.join(',') ?? '',
           type: filters.types?.join(',') ?? '',
+          advisorIds: filters.advisorIds?.join(',') ?? '',
           page,
           limit,
           sortBy: sort.column,
@@ -73,6 +74,7 @@ const ThesesProvider = (props: PropsWithChildren<IThesesProviderProps>) => {
     sort,
     filters.states?.join(','),
     filters.types?.join(','),
+    filters.advisorIds?.join(','),
     debouncedSearch,
   ])
 

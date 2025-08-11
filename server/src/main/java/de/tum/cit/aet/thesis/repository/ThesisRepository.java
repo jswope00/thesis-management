@@ -30,6 +30,12 @@ public interface ThesisRepository extends JpaRepository<Thesis, UUID> {
              )
              AND (:states IS NULL OR t.state IN :states)
              AND (:types IS NULL OR t.type IN :types)
+             AND (:advisorIds IS NULL OR EXISTS (
+                 SELECT 1 FROM ThesisRole ar 
+                 WHERE ar.thesis.id = t.id 
+                 AND ar.id.role = 'ADVISOR' 
+                 AND ar.user.id IN :advisorIds
+             ))
              AND (
                  :searchQuery IS NULL OR (
                      LOWER(t.title) LIKE %:searchQuery%
@@ -44,6 +50,7 @@ public interface ThesisRepository extends JpaRepository<Thesis, UUID> {
             @Param("researchGroupIds") Set<UUID> researchGroupIds,
             @Param("userId") UUID userId,
             @Param("visibilities") Set<ThesisVisibility> visibilities,
+            @Param("advisorIds") Set<UUID> advisorIds,
             @Param("searchQuery") String searchQuery,
             @Param("states") Set<ThesisState> states,
             @Param("types") Set<String> types,

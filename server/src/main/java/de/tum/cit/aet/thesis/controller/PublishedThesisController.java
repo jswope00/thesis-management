@@ -48,7 +48,8 @@ public class PublishedThesisController {
                 limit,
                 sortBy,
                 sortOrder,
-                researchGroupIds
+                researchGroupIds,
+                null
         );
 
         return ResponseEntity.ok(PaginationDto.fromSpringPage(theses.map(PublishedThesisDto::fromThesisEntity)));

@@ -92,7 +92,8 @@ public class ThesisService {
         int limit,
         String sortBy,
         String sortOrder,
-        UUID[] researchGroupIds
+        UUID[] researchGroupIds,
+        UUID[] advisorIds
     ) {
         Sort.Order order = new Sort.Order(sortOrder.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy);
         String searchQueryFilter = searchQuery == null || searchQuery.isEmpty() ? null : searchQuery.toLowerCase();
@@ -103,6 +104,12 @@ public class ThesisService {
 
         if (researchGroupIds != null && researchGroupIds.length > 0) {
             researchGroupIdsFilter = new HashSet<>(Arrays.asList(researchGroupIds));
+        }
+
+        Set<UUID> advisorIdsFilter = null;
+
+        if (advisorIds != null && advisorIds.length > 0) {
+            advisorIdsFilter = new HashSet<>(Arrays.asList(advisorIds));
         }
         Set<ThesisVisibility> visibilitySet = Set.of();
 
@@ -124,6 +131,7 @@ public class ThesisService {
                 researchGroupIdsFilter,
                 userId,
                 visibilitySet,
+                advisorIdsFilter,
                 searchQueryFilter,
                 statesFilter,
                 typesFilter,
@@ -661,6 +669,7 @@ public class ThesisService {
         Page<Thesis> theses = thesisRepository.searchTheses(
             null,
                 user.getId(),
+                null,
                 null,
                 null,
                 Set.of(
