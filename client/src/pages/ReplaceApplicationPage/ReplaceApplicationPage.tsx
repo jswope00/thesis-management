@@ -13,7 +13,7 @@ import { usePageTitle } from '../../hooks/theme'
 const ReplaceApplicationPage = () => {
   const { topicId, applicationId } = useParams<{ topicId: string; applicationId: string }>()
 
-  usePageTitle('Submit CILE Introduction')
+  usePageTitle('Submit CILE Topic')
 
   const [application, setApplication] = useState<IApplication>()
 

@@ -37,7 +37,6 @@ const UserInformationForm = (props: IUserInformationFormProps) => {
       customData: Record<string, string>
       declarationOfConsentAccepted: boolean
       avatar: File | undefined
-      examinationReport: File | undefined
       cv: File | undefined
       degreeReport: File | undefined
     }
@@ -58,7 +57,6 @@ const UserInformationForm = (props: IUserInformationFormProps) => {
       interests: '',
       declarationOfConsentAccepted: localStorage.getItem('declarationOfConsentAccepted') === 'true',
       avatar: undefined,
-      examinationReport: undefined,
       cv: undefined,
       degreeReport: undefined,
       customData: Object.fromEntries(
@@ -75,13 +73,6 @@ const UserInformationForm = (props: IUserInformationFormProps) => {
       email: requireCompletion ? isEmail('Invalid email') : undefined,
       studyProgram: requireCompletion ? isNotEmpty('Please select your study program') : undefined,
       graduationYear: requireCompletion ? isNotEmpty('Please select your expected graduation year') : undefined,
-      examinationReport: (value) => {
-        if (!value && requireCompletion) {
-          return 'Please upload your examination report'
-        } else if (value && value.size > 2 * 1024 ** 3) {
-          return 'The examination report should not exceed 2mb'
-        }
-      },
       ...Object.fromEntries(
         Object.entries(GLOBAL_CONFIG.custom_data)
           .filter(([, value]) => value.required)
@@ -121,11 +112,6 @@ const UserInformationForm = (props: IUserInformationFormProps) => {
     (file) => form.setFieldValue('cv', file),
   )
   useApiPdfFile(
-    user.hasExaminationReport ? `/v2/users/${user.userId}/examination-report` : undefined,
-    `examination-report-${user.userId}.pdf`,
-    (file) => form.setFieldValue('examinationReport', file),
-  )
-  useApiPdfFile(
     user.hasDegreeReport ? `/v2/users/${user.userId}/degree-report` : undefined,
     `degree-report-${user.userId}.pdf`,
     (file) => form.setFieldValue('degreeReport', file),
@@ -155,7 +141,7 @@ const UserInformationForm = (props: IUserInformationFormProps) => {
               customData: values.customData,
             },
             values.avatar,
-            values.examinationReport,
+            undefined,
             values.cv,
             values.degreeReport,
           )
@@ -252,14 +238,6 @@ const UserInformationForm = (props: IUserInformationFormProps) => {
             {...form.getInputProps(`customData.${key}`)}
           />
         ))}
-        <UploadArea
-          label='Upload Draft CILE Introduction'
-          required={requireCompletion}
-          value={form.values.examinationReport}
-          onChange={(file) => form.setFieldValue('examinationReport', file)}
-          maxSize={2 * 1024 * 1024}
-          accept='pdf'
-        />
 
         <Group>
           <Button type='submit' ml='auto' disabled={!form.isValid()} loading={loading}>

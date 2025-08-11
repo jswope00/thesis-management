@@ -47,7 +47,7 @@ const SelectTopicStep = (props: ISelectTopicStepProps) => {
         ))}
         {GLOBAL_CONFIG.allow_suggested_topics && (
           <Center mt="md">
-            <Button onClick={() => onComplete(undefined)}>Submit CILE Introduction</Button>
+            <Button onClick={() => onComplete(undefined)}>Submit CILE Topic</Button>
           </Center>
         )}
       </Accordion>

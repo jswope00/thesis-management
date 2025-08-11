@@ -64,7 +64,7 @@ const links: Array<{
   },
   {
     link: '/submit-application',
-    label: 'Submit CILE Introduction',
+    label: 'Submit CILE Topic',
     icon: PaperPlaneTilt,
     groups: undefined,
   },

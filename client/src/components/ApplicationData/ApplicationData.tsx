@@ -40,9 +40,9 @@ const ApplicationData = (props: IApplicationDataProps) => {
               <TopicAccordionItem topic={application.topic} />
             </Accordion>
           ) : (
-            <LabeledItem label='Thesis Title' value={application.thesisTitle} />
+            <LabeledItem label='CILE Topic Title' value={application.thesisTitle} />
           )}
-          <DocumentEditor label='Motivation' value={application.motivation} />
+          <DocumentEditor label='Draft CILE Introduction' value={application.motivation} />
           <Grid>
             <Grid.Col span={{ xs: 4, sm: 3 }}>
               <LabeledItem
