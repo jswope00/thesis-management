@@ -181,26 +181,6 @@ const AuthenticatedArea = (props: PropsWithChildren<IAuthenticatedAreaProps>) =>
       <AppShell.Navbar p='md'>
         <AppShell.Section grow mb='md'>
 
-          {!minimized && (
-            <Group preventGrowOverflow={false}>
-              <Logo className={classes.logo} />
-              <Text
-                className={classes.siteName}
-                fw='bold'
-                style={{ cursor: 'pointer' }}
-                onClick={() => navigate('/')}
-              >
-                CILE Management
-              </Text>
-              <ColorSchemeToggleButton ml='auto' />
-            </Group>
-          )}
-          {!minimized && <Divider my='sm' />}
-          {minimized && (
-            <Center mb='md'>
-              <ColorSchemeToggleButton />
-            </Center>
-          )}
           {links
             .filter(
               (item) =>

@@ -38,7 +38,6 @@ const AboutPage = () => {
   }, [])
 
   return (
-    <PublicArea withBackButton={true}>
       <Stack>
         <Title>CILE Management</Title>
         <Text>
@@ -124,7 +123,6 @@ const AboutPage = () => {
           </List.Item>
         </List>
       </Stack>
-    </PublicArea>
   )
 }
 

@@ -97,6 +97,16 @@ export const GLOBAL_CONFIG: IGlobalConfig = {
     ENGLISH: 'English'
   },
 
+  topic_views_options: getEnvironmentVariable<Record<string, string>>('TOPIC_VIEWS_OPTIONS', true) || {
+    ALL: 'All Topics',
+    MY_RESEARCH_GROUP: 'My Research Group',
+    MY_TOPICS: 'My Topics',
+  },
+
+  research_groups_location: getEnvironmentVariable<Record<string, string>>('RESEARCH_GROUPS_LOCATION', true) || {
+    DEFAULT: 'Default Location',
+  },
+
   custom_data: getEnvironmentVariable<IGlobalConfig['custom_data']>('CUSTOM_DATA', true) || {
     PUBH831_Faculty: {
       label: 'PUBH831 Faculty',
