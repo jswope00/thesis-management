@@ -106,6 +106,7 @@ const ApplicationsProvider = (props: PropsWithChildren<IApplicationsProviderProp
                 topicId === 'NO_TOPIC' ? '00000000-0000-0000-0000-000000000000' : topicId,
               )
               .join(',') ?? '',
+          advisors: adjustedFilters.advisors?.join(',') ?? '',
           includeSuggestedTopics: !adjustedFilters.topics?.length
             ? 'true'
             : adjustedFilters.topics.includes('NO_TOPIC')
@@ -143,6 +144,7 @@ const ApplicationsProvider = (props: PropsWithChildren<IApplicationsProviderProp
     adjustedFilters.states?.join(','),
     adjustedFilters.topics?.join(','),
     adjustedFilters.types?.join(','),
+    adjustedFilters.advisors?.join(','),
     debouncedSearch,
     !topics,
   ])

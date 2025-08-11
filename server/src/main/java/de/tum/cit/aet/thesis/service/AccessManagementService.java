@@ -30,7 +30,7 @@ public class AccessManagementService {
     private final String serviceClientId;
     private final String serviceClientSecret;
     private final String clientId;
-    private final UUID applicationClientUUID;
+    private UUID applicationClientUUID;
     private final UUID studentGroupId;
 
     private String accessToken;
@@ -58,13 +58,8 @@ public class AccessManagementService {
                 .baseUrl(keycloakHost)
                 .build();
 
-        UUID applicationClientUUID = null;
-        try {
-            applicationClientUUID = clientId.isBlank() || serviceClientSecret.isBlank() ? null : getApplicationClientUUID();
-        } catch (RuntimeException exception) {
-            log.warn("Could not fetch client id from configured service client", exception);
-        }
-        this.applicationClientUUID = applicationClientUUID;
+        // applicationClientUUID will be fetched lazily when first needed
+        this.applicationClientUUID = null;
 
         UUID studentGroupId = null;
         try {
@@ -307,7 +302,15 @@ public class AccessManagementService {
     }
 
     private record ClientElement(UUID id, String clientId, String name) {}
-    private UUID getApplicationClientUUID() {
+    private synchronized UUID getApplicationClientUUID() {
+        if (applicationClientUUID != null) {
+            return applicationClientUUID;
+        }
+        
+        if (clientId.isBlank() || serviceClientSecret.isBlank()) {
+            throw new IllegalStateException("Client ID or service client secret is not configured");
+        }
+        
         ClientElement client = webClient.method(HttpMethod.GET)
                 .uri(uriBuilder -> uriBuilder
                         .path("/admin/realms/" + keycloakRealmName + "/clients")
@@ -323,7 +326,8 @@ public class AccessManagementService {
             throw new IllegalStateException("Client not found: " + clientId);
         }
 
-        return client.id();
+        applicationClientUUID = client.id();
+        return applicationClientUUID;
     }
 
     /**

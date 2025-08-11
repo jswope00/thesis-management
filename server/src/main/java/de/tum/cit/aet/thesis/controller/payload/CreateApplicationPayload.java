@@ -9,6 +9,7 @@ public record CreateApplicationPayload (
     String thesisType,
     Instant desiredStartDate,
     String motivation,
-    UUID researchGroupId
+    UUID researchGroupId,
+    UUID facultyAdvisorId
 ) {
 }

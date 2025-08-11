@@ -49,7 +49,7 @@ public class UserController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('admin', 'advisor', 'supervisor')")
+    @PreAuthorize("hasAnyRole('admin', 'advisor', 'supervisor', 'student')")
     public ResponseEntity<PaginationDto<LightUserDto>> getUsers(
             @RequestParam(required = false) String searchQuery,
             @RequestParam(required = false) String[] groups,
@@ -127,4 +127,6 @@ public class UserController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=degree_report_%s.pdf", userId))
                 .body(userService.getDegreeReport(user));
     }
+
+
 }

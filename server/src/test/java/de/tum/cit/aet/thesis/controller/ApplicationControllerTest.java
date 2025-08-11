@@ -46,7 +46,8 @@ class ApplicationControllerTest extends BaseIntegrationTest {
                 "MASTER",
                 Instant.now(),
                 "Test motivation",
-                createDefaultResearchGroup()
+                createDefaultResearchGroup(),
+                null
         );
         createTestEmailTemplate("APPLICATION_CREATED_CHAIR");
         createTestEmailTemplate("APPLICATION_CREATED_STUDENT");

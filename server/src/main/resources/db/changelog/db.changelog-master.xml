@@ -15,4 +15,5 @@
     <include file="changes/09_email_templates.sql" relativeToChangelogFile="true"/>
     <include file="changes/10_unique_abbreviation_research_group.sql" relativeToChangelogFile="true"/>
     <include file="changes/custom/1_add_incoming_term.sql" relativeToChangelogFile="true"/>
+    <include file="changes/custom/2_add_faculty_advisor_to_applications.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>

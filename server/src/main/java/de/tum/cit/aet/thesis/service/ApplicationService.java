@@ -11,6 +11,7 @@ import de.tum.cit.aet.thesis.repository.ApplicationRepository;
 import de.tum.cit.aet.thesis.repository.ApplicationReviewerRepository;
 import de.tum.cit.aet.thesis.repository.ResearchGroupRepository;
 import de.tum.cit.aet.thesis.repository.TopicRepository;
+import de.tum.cit.aet.thesis.repository.UserRepository;
 import de.tum.cit.aet.thesis.security.CurrentUserProvider;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,7 @@ public class ApplicationService {
     private final ApplicationReviewerRepository applicationReviewerRepository;
     private final ObjectProvider<CurrentUserProvider> currentUserProviderProvider;
     private final ResearchGroupRepository researchGroupRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public ApplicationService(
@@ -42,7 +44,9 @@ public class ApplicationService {
             ThesisService thesisService,
             TopicService topicService,
             ApplicationReviewerRepository applicationReviewerRepository,
-            ObjectProvider<CurrentUserProvider> currentUserProviderProvider, ResearchGroupRepository researchGroupRepository
+            ObjectProvider<CurrentUserProvider> currentUserProviderProvider, 
+            ResearchGroupRepository researchGroupRepository,
+            UserRepository userRepository
     ) {
         this.applicationRepository = applicationRepository;
         this.mailingService = mailingService;
@@ -52,6 +56,7 @@ public class ApplicationService {
         this.applicationReviewerRepository = applicationReviewerRepository;
         this.currentUserProviderProvider = currentUserProviderProvider;
         this.researchGroupRepository = researchGroupRepository;
+        this.userRepository = userRepository;
     }
 
     private CurrentUserProvider currentUserProvider() {
@@ -66,6 +71,7 @@ public class ApplicationService {
             String[] previous,
             String[] topics,
             String[] types,
+            String[] advisors,
             boolean includeSuggestedTopics,
             int page,
             int limit,
@@ -79,6 +85,7 @@ public class ApplicationService {
         Set<ApplicationState> statesFilter = states == null || states.length == 0 ? null : new HashSet<>(Arrays.asList(states));
         Set<String> topicsFilter = topics == null || topics.length == 0 ? null : new HashSet<>(Arrays.asList(topics));
         Set<String> typesFilter = types == null || types.length == 0 ? null : new HashSet<>(Arrays.asList(types));
+        Set<String> advisorsFilter = advisors == null || advisors.length == 0 ? null : new HashSet<>(Arrays.asList(advisors));
         Set<String> previousFilter = previous == null || previous.length == 0 ? null : new HashSet<>(Arrays.asList(previous));
 
         return applicationRepository.searchApplications(
@@ -90,6 +97,7 @@ public class ApplicationService {
                 previousFilter,
                 topicsFilter,
                 typesFilter,
+                advisorsFilter,
                 includeSuggestedTopics,
                 PageRequest.of(page, limit, Sort.by(order))
         );
@@ -97,7 +105,7 @@ public class ApplicationService {
 
     @Transactional
     public Application createApplication(User user, UUID researchGroupId, UUID topicId, String thesisTitle,
-                                         String thesisType, Instant desiredStartDate, String motivation) {
+                                         String thesisType, Instant desiredStartDate, String motivation, UUID facultyAdvisorId) {
         Topic topic = topicId == null ? null : topicService.findById(topicId);
 
         if (topic != null && topic.getClosedAt() != null) {
@@ -120,6 +128,12 @@ public class ApplicationService {
                 : researchGroupRepository.findById(researchGroupId).orElseThrow(() -> new ResourceNotFoundException(
                 String.format("Research Group with id %s not found.", researchGroupId)));
         application.setResearchGroup(researchGroup);
+        
+        if (facultyAdvisorId != null) {
+            User facultyAdvisor = userRepository.findById(facultyAdvisorId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Faculty advisor not found"));
+            application.setFacultyAdvisor(facultyAdvisor);
+        }
 
         application = applicationRepository.save(application);
 
@@ -129,13 +143,21 @@ public class ApplicationService {
     }
 
     @Transactional
-    public Application updateApplication(Application application, UUID topicId, String thesisTitle, String thesisType, Instant desiredStartDate, String motivation) {
+    public Application updateApplication(Application application, UUID topicId, String thesisTitle, String thesisType, Instant desiredStartDate, String motivation, UUID facultyAdvisorId) {
         currentUserProvider().assertCanAccessResearchGroup(application.getResearchGroup());
         application.setTopic(topicId == null ? null : topicService.findById(topicId));
         application.setThesisTitle(thesisTitle);
         application.setThesisType(thesisType);
         application.setMotivation(motivation);
         application.setDesiredStartDate(desiredStartDate);
+        
+        if (facultyAdvisorId != null) {
+            User facultyAdvisor = userRepository.findById(facultyAdvisorId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Faculty advisor not found"));
+            application.setFacultyAdvisor(facultyAdvisor);
+        } else {
+            application.setFacultyAdvisor(null);
+        }
 
         application = applicationRepository.save(application);
 

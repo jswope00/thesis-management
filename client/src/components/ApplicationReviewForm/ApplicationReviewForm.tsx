@@ -79,7 +79,9 @@ const ApplicationReviewForm = (props: IApplicationReviewFormProps) => {
           application.thesisType || GLOBAL_CONFIG.thesis_types[application.thesisType || '']
             ? application.thesisType
             : null,
-        advisors: application.topic?.advisors.map((advisor) => advisor.userId) ?? [],
+        advisors: application.topic?.advisors.map((advisor) => advisor.userId) ?? 
+          (application.facultyAdvisor ? [application.facultyAdvisor.userId] : 
+           (application.researchGroup?.head ? [application.researchGroup.head.userId] : [])),
         supervisors: application.topic?.supervisors.map((supervisor) => supervisor.userId) ?? [
           application.researchGroup.head.userId,
         ],
@@ -245,8 +247,8 @@ const ApplicationReviewForm = (props: IApplicationReviewFormProps) => {
           <TextInput
             type='text'
             required={true}
-            placeholder='Thesis Title'
-            label='Thesis Title'
+            placeholder='CILE Topic Title'
+            label='CILE Topic Title'
             {...form.getInputProps('title')}
           />
 
@@ -272,7 +274,8 @@ const ApplicationReviewForm = (props: IApplicationReviewFormProps) => {
             label='Advisor(s)'
             required={true}
             groups={['advisor', 'supervisor']}
-            initialUsers={application.topic?.advisors}
+            initialUsers={application.topic?.advisors || (application.facultyAdvisor ? [application.facultyAdvisor] : 
+              (application.researchGroup?.head ? [application.researchGroup.head] : []))}
             {...form.getInputProps('advisors')}
           />
 

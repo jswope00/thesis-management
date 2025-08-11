@@ -85,6 +85,10 @@ public class Application {
   @JoinColumn(name = "research_group_id", nullable = false)
   private ResearchGroup researchGroup;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "faculty_advisor_id")
+  private User facultyAdvisor;
+
   @OneToMany(mappedBy = "application", fetch = FetchType.EAGER)
   @OrderBy("reviewedAt ASC")
   private List<ApplicationReviewer> reviewers = new ArrayList<>();

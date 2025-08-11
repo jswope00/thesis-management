@@ -26,4 +26,5 @@ export interface IApplication {
   }> | null
   reviewedAt: string | null
   researchGroup: ILightResearchGroup
+  facultyAdvisor: ILightUser | null
 }

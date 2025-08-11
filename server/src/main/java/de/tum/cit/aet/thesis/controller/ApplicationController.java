@@ -69,7 +69,8 @@ public class ApplicationController {
                         StringLimits.THESIS_TITLE.getLimit()),
                 RequestValidator.validateNotNull(payload.desiredStartDate()),
                 RequestValidator.validateStringMaxLength(payload.motivation(),
-                        StringLimits.LONGTEXT.getLimit())
+                        StringLimits.LONGTEXT.getLimit()),
+                payload.facultyAdvisorId()
         );
 
         return ResponseEntity.ok(ApplicationDto.fromApplicationEntity(application, application.hasManagementAccess(authenticatedUser)));
@@ -81,6 +82,7 @@ public class ApplicationController {
             @RequestParam(required = false) ApplicationState[] state,
             @RequestParam(required = false) String[] topic,
             @RequestParam(required = false) String[] types,
+            @RequestParam(required = false) String[] advisors,
             @RequestParam(required = false) String[] previous,
             @RequestParam(required = false, defaultValue = "true") boolean includeSuggestedTopics,
             @RequestParam(required = false, defaultValue = "false") boolean fetchAll,
@@ -102,6 +104,7 @@ public class ApplicationController {
                 previous,
                 topic,
                 types,
+                advisors,
                 includeSuggestedTopics,
                 page,
                 limit,
@@ -152,7 +155,8 @@ public class ApplicationController {
                 RequestValidator.validateStringMaxLengthAllowNull(payload.thesisTitle(), StringLimits.THESIS_TITLE.getLimit()),
                 RequestValidator.validateStringMaxLength(payload.thesisType(), StringLimits.THESIS_TITLE.getLimit()),
                 RequestValidator.validateNotNull(payload.desiredStartDate()),
-                RequestValidator.validateStringMaxLength(payload.motivation(), StringLimits.LONGTEXT.getLimit())
+                RequestValidator.validateStringMaxLength(payload.motivation(), StringLimits.LONGTEXT.getLimit()),
+                payload.facultyAdvisorId()
         );
 
         return ResponseEntity.ok(ApplicationDto.fromApplicationEntity(application, application.hasManagementAccess(authenticatedUser)));

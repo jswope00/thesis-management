@@ -30,7 +30,7 @@ const ThesisProposalSection = () => {
     } else {
       throw new ApiError(response)
     }
-  }, 'Proposal accepted successfully')
+  }, 'CILE Introduction accepted successfully')
 
   const onUpload = async (file: File) => {
     const formData = new FormData()
@@ -60,7 +60,7 @@ const ThesisProposalSection = () => {
       defaultValue={thesis.state === ThesisState.PROPOSAL ? 'open' : ''}
     >
       <Accordion.Item value='open'>
-        <Accordion.Control>Proposal</Accordion.Control>
+        <Accordion.Control>CILE Introduction</Accordion.Control>
         <Accordion.Panel>
           <Stack>
             {proposal ? (
@@ -68,7 +68,7 @@ const ThesisProposalSection = () => {
                 url={`/v2/theses/${thesis.thesisId}/proposal/${proposal.proposalId}`}
                 filename={formatThesisFilename(
                   thesis,
-                  'Proposal',
+                  'CILE Introduction',
                   proposal.filename,
                   thesis.proposals.length,
                 )}
@@ -83,7 +83,7 @@ const ThesisProposalSection = () => {
                       accept='pdf'
                       ml='auto'
                     >
-                      Upload Proposal
+                      Upload CILE Introduction
                     </UploadFileButton>
                   ) : undefined
                 }
@@ -91,10 +91,10 @@ const ThesisProposalSection = () => {
               />
             ) : (
               <Stack>
-                <Text ta='center'>No proposal uploaded yet</Text>
+                <Text ta='center'>No introduction uploaded yet</Text>
                 <Center>
                   <UploadFileButton onUpload={onUpload} maxSize={25 * 1024 * 1024} accept='pdf'>
-                    Upload Proposal
+                    Upload CILE Introduction
                   </UploadFileButton>
                 </Center>
               </Stack>
@@ -108,7 +108,7 @@ const ThesisProposalSection = () => {
                 data={thesis.proposals.map((row, index) => ({
                   filename: formatThesisFilename(
                     thesis,
-                    'Proposal',
+                    'Final CILE Introduction',
                     row.filename,
                     thesis.proposals.length - index,
                   ),
@@ -116,7 +116,7 @@ const ThesisProposalSection = () => {
                   type: 'pdf',
                   uploadedBy: row.createdBy,
                   uploadedAt: row.createdAt,
-                  name: `Proposal v${thesis.proposals.length - index}`,
+                  name: `CILE Introduction v${thesis.proposals.length - index}`,
                   onDelete:
                     access.advisor && !isThesisClosed(thesis)
                       ? async () => {
@@ -144,15 +144,15 @@ const ThesisProposalSection = () => {
               )}
               {access.advisor && thesis.state === ThesisState.PROPOSAL && (
                 <ConfirmationButton
-                  confirmationTitle='Accept Proposal'
-                  confirmationText='Are you sure you want to accept the proposal?'
+                  confirmationTitle='Accept CILE Introduction'
+                  confirmationText='Are you sure you want to accept this phase of the CILE project?'
                   variant='outline'
                   color='green'
                   loading={accepting}
                   disabled={!proposal}
                   onClick={onAccept}
                 >
-                  Accept Proposal
+                  Accept CILE Introduction
                 </ConfirmationButton>
               )}
             </Group>

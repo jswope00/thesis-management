@@ -210,7 +210,8 @@ public abstract class BaseIntegrationTest {
                 "BACHELOR",
                 Instant.now(),
                 "Test motivation",
-                createDefaultResearchGroup()
+                createDefaultResearchGroup(),
+                null
         );
 
         String response = mockMvc.perform(MockMvcRequestBuilders.post("/v2/applications")

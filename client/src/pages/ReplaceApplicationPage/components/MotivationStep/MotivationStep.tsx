@@ -14,6 +14,7 @@ import TopicAccordionItem from '../../../../components/TopicAccordionItem/TopicA
 import { formatThesisType } from '../../../../utils/format'
 import { PaginationResponse } from '../../../../requests/responses/pagination'
 import { ILightResearchGroup } from '../../../../requests/responses/researchGroup'
+import AdvisorSelect from '../../../../components/AdvisorSelect/AdvisorSelect'
 
 interface IMotivationStepProps {
   topic: ITopic | undefined
@@ -24,6 +25,7 @@ interface IMotivationStepProps {
 interface IMotivationStepForm {
   thesisTitle: string
   researchGroupId: string
+  facultyAdvisorId: string
   thesisType: string | null
   desiredStartDate: DateValue
   motivation: string
@@ -42,6 +44,7 @@ const MotivationStep = (props: IMotivationStepProps) => {
     initialValues: {
       thesisTitle: '',
       researchGroupId: '',
+      facultyAdvisorId: '',
       thesisType: null,
       desiredStartDate: new Date(),
       motivation: '',
@@ -50,17 +53,18 @@ const MotivationStep = (props: IMotivationStepProps) => {
     validate: {
       thesisTitle: (value) => {
         if (!mergedTopic && !value) {
-          return 'Please state your suggested thesis title'
+          return 'Please state your suggested CILE Topic Title'
         }
       },
       researchGroupId: isNotEmpty('Please select a research group'),
+      facultyAdvisorId: isNotEmpty('Please select a faculty advisor'),
       thesisType: isNotEmpty('Please state your CILE format'),
       desiredStartDate: isNotEmpty('Please state your desired start date'),
       motivation: (value) => {
         if (!value) {
-          return 'Please state your motivation'
-        } else if (getHtmlTextLength(value) > 1000) {
-          return 'The maximum allowed number of characters is 1000'
+          return 'Please submit a draft introduction for your CILE project.'
+        } else if (getHtmlTextLength(value) > 10000) {
+          return 'The maximum allowed number of characters is 10000'
         }
       },
     },
@@ -74,6 +78,7 @@ const MotivationStep = (props: IMotivationStepProps) => {
         thesisType: application.thesisType,
         thesisTitle: application.thesisTitle ?? '',
         researchGroupId: application.researchGroup.id,
+        facultyAdvisorId: application.facultyAdvisor?.userId || '',
       })
     }
   }, [application?.applicationId])
@@ -142,6 +147,7 @@ const MotivationStep = (props: IMotivationStepProps) => {
           data: {
             topicId: mergedTopic?.topicId,
             researchGroupId: values.researchGroupId,
+            facultyAdvisorId: values.facultyAdvisorId,
             thesisTitle: values.thesisTitle || null,
             thesisType: values.thesisType,
             desiredStartDate: values.desiredStartDate,
@@ -185,6 +191,11 @@ const MotivationStep = (props: IMotivationStepProps) => {
           }))}
           {...form.getInputProps('researchGroupId')}
         />
+        <AdvisorSelect
+          value={form.values.facultyAdvisorId}
+          onChange={(value) => form.setFieldValue('facultyAdvisorId', value)}
+          required={true}
+        />
         <Select
           label='CILE Format'
           required={true}
@@ -202,10 +213,10 @@ const MotivationStep = (props: IMotivationStepProps) => {
           {...form.getInputProps('desiredStartDate')}
         />
         <DocumentEditor
-          label='Motivation'
+          label='Submit Draft CILE Introduction'
           required={true}
           editMode={true}
-          maxLength={1000}
+          maxLength={10000}
           {...form.getInputProps('motivation')}
         />
         <Button type='submit' ml='auto' disabled={!form.isValid()} loading={loading}>

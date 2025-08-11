@@ -2,9 +2,15 @@ import { Grid, MultiSelect, Select, TextInput } from '@mantine/core'
 import { MagnifyingGlass } from 'phosphor-react'
 import { ApplicationState } from '../../requests/responses/application'
 import { useApplicationsContext } from '../../providers/ApplicationsProvider/hooks'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { formatApplicationState, formatThesisType } from '../../utils/format'
 import { GLOBAL_CONFIG } from '../../config/global'
+import { doRequest } from '../../requests/request'
+import { showSimpleError } from '../../utils/notification'
+import { getApiResponseErrorMessage } from '../../requests/handler'
+import { ILightUser } from '../../requests/responses/user'
+import { PaginationResponse } from '../../requests/responses/pagination'
+import { useLoggedInUser } from '../../hooks/authentication'
 
 interface IApplicationsFiltersProps {
   size?: 'xl' | 'sm'
@@ -14,6 +20,49 @@ const ApplicationsFilters = (props: IApplicationsFiltersProps) => {
   const { size = 'xl' } = props
 
   const { topics, filters, setFilters, sort, setSort } = useApplicationsContext()
+  const user = useLoggedInUser()
+  
+  const [advisors, setAdvisors] = useState<ILightUser[]>([])
+
+  useEffect(() => {
+    doRequest<PaginationResponse<ILightUser>>(
+      '/v2/users',
+      {
+        method: 'GET',
+        requiresAuth: true,
+        params: {
+          groups: 'advisor,supervisor',
+          page: 0,
+          limit: 1000,
+          sortBy: 'firstName',
+          sortOrder: 'asc',
+        },
+      },
+      (res) => {
+        if (res.ok) {
+          setAdvisors(res.data.content)
+          
+          // Set default advisor filter to current user if they are an advisor/supervisor
+          // and no advisor filter is currently set
+          if (!filters.advisors || filters.advisors.length === 0) {
+            const currentUserInAdvisors = res.data.content.find(
+              (advisor) => advisor.userId === user.userId
+            )
+            
+            if (currentUserInAdvisors) {
+              setFilters((prev) => ({
+                ...prev,
+                advisors: [currentUserInAdvisors.userId],
+              }))
+            }
+          }
+        } else {
+          showSimpleError(getApiResponseErrorMessage(res))
+          setAdvisors([])
+        }
+      },
+    )
+  }, [user.userId, filters.advisors, setFilters])
 
   return (
     <Grid gutter='sm'>
@@ -87,6 +136,25 @@ const ApplicationsFilters = (props: IApplicationsFiltersProps) => {
             setFilters((prev) => ({
               ...prev,
               states: value as ApplicationState[],
+            }))
+          }}
+          searchable
+        />
+      </Grid.Col>
+      <Grid.Col span={size === 'sm' ? 12 : 6}>
+        <MultiSelect
+          hidePickedOptions
+          label='Faculty Advisor'
+          placeholder='Select Advisors'
+          data={advisors.map((advisor) => ({
+            value: advisor.userId,
+            label: `${advisor.firstName || ''} ${advisor.lastName || ''}`.trim() || advisor.universityId || 'Unknown',
+          }))}
+          value={filters.advisors || []}
+          onChange={(value) => {
+            setFilters((prev) => ({
+              ...prev,
+              advisors: value,
             }))
           }}
           searchable

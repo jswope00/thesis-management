@@ -23,7 +23,8 @@ public record ApplicationDto(
     Instant createdAt,
     List<ApplicationReviewerDto> reviewers,
     Instant reviewedAt,
-    LightResearchGroupDto researchGroup
+    LightResearchGroupDto researchGroup,
+    LightUserDto facultyAdvisor
 ) {
 
   public static ApplicationDto fromApplicationEntity(Application application,
@@ -48,7 +49,8 @@ public record ApplicationDto(
         protectedData ? application.getReviewers().stream()
             .map(ApplicationReviewerDto::fromApplicationReviewerEntity).toList() : null,
         application.getReviewedAt(),
-        LightResearchGroupDto.fromResearchGroupEntity(application.getResearchGroup())
+        LightResearchGroupDto.fromResearchGroupEntity(application.getResearchGroup()),
+        LightUserDto.fromUserEntity(application.getFacultyAdvisor())
     );
   }
 

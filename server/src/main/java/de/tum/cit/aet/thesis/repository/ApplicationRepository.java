@@ -31,6 +31,7 @@ public interface ApplicationRepository extends JpaRepository<Application, UUID> 
               (:includeSuggestedTopics = true OR a.topic IS NOT NULL) AND
               (:topics IS NULL OR a.topic.id IN :topics OR (:includeSuggestedTopics = true AND a.topic IS NULL)) AND
               (:types IS NULL OR a.thesisType IN :types) AND
+              (:advisors IS NULL OR a.facultyAdvisor.id IN :advisors) AND
               (:searchQuery IS NULL OR (
                 LOWER(a.user.firstName) || ' ' || LOWER(a.user.lastName) LIKE %:searchQuery% OR
                 LOWER(a.user.email) LIKE %:searchQuery% OR
@@ -47,6 +48,7 @@ public interface ApplicationRepository extends JpaRepository<Application, UUID> 
             @Param("previousIds") Set<String> previousIds,
             @Param("topics") Set<String> topics,
             @Param("types") Set<String> types,
+            @Param("advisors") Set<String> advisors,
             @Param("includeSuggestedTopics") boolean includeSuggestedTopics,
             Pageable page
     );
