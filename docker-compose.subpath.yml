@@ -1,0 +1,155 @@
+# Docker Compose configuration for subpath deployment with external Keycloak and PostgreSQL
+# This configuration is for deploying to https://ai-portal.sgu.edu/cile
+# 
+# Prerequisites:
+# 1. External PostgreSQL database configured and accessible
+# 2. External Keycloak instance configured with proper realm and clients
+# 3. Create .env file with sensitive credentials (see env.subpath.template)
+# 4. Reverse proxy on host configured to forward /cile/* requests
+#
+# Usage:
+#   docker-compose -f docker-compose.subpath.yml up -d
+
+services:
+  server:
+    # Build server locally to include your custom changes
+    build:
+      context: .
+      dockerfile: server.Dockerfile
+    image: "thesis-management-server:local"
+    container_name: thesis-management-server
+    restart: unless-stopped
+    
+    volumes:
+      - ./thesis_uploads:/uploads
+    
+    ports:
+      # Expose only to localhost - your reverse proxy should forward to this
+      - "127.0.0.1:8080:8080"
+    
+    environment:
+      # Timezone
+      - TZ=${TZ:-America/Los_Angeles}
+      
+      # Database migration strategy (validate = don't auto-migrate, update = auto-migrate)
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=validate
+      
+      # External PostgreSQL Connection
+      # Format: jdbc:postgresql://HOST:PORT/DATABASE_NAME
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
+      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+      
+      # Server Context Path (for subpath deployment)
+      # Set to /cile/api for https://ai-portal.sgu.edu/cile deployment
+      - SERVER_CONTEXT_PATH=${SERVER_CONTEXT_PATH:-/cile/api}
+      
+      # External Keycloak Connection
+      - KEYCLOAK_HOST=${KEYCLOAK_HOST}
+      - KEYCLOAK_REALM_NAME=${KEYCLOAK_REALM_NAME:-thesis-management}
+      - KEYCLOAK_CLIENT_ID=${KEYCLOAK_CLIENT_ID:-thesis-management-app}
+      - KEYCLOAK_SERVICE_CLIENT_ID=${KEYCLOAK_SERVICE_CLIENT_ID}
+      - KEYCLOAK_SERVICE_CLIENT_SECRET=${KEYCLOAK_SERVICE_CLIENT_SECRET}
+      - KEYCLOAK_SERVICE_STUDENT_GROUP_NAME=${KEYCLOAK_SERVICE_STUDENT_GROUP_NAME:-thesis-students}
+      
+      # Application URLs
+      # These should include the full public URLs with subpath
+      - CLIENT_HOST=${CLIENT_HOST:-https://ai-portal.sgu.edu/cile}
+      
+      # Mail Configuration
+      - MAIL_ENABLED=${MAIL_ENABLED:-false}
+      - POSTFIX_HOST=${POSTFIX_HOST:-}
+      - POSTFIX_PORT=${POSTFIX_PORT:-587}
+      - POSTFIX_USERNAME=${POSTFIX_USERNAME:-}
+      - POSTFIX_PASSWORD=${POSTFIX_PASSWORD:-}
+      - MAIL_SENDER=${MAIL_SENDER:-}
+      - MAIL_WORKSPACE_URL=${MAIL_WORKSPACE_URL:-}
+      - MAIL_SIGNATURE=${MAIL_SIGNATURE:-}
+      - MAIL_BCC_RECIPIENTS=${MAIL_BCC_RECIPIENTS:-}
+      
+      # CalDAV Configuration (optional)
+      - CALDAV_ENABLED=${CALDAV_ENABLED:-false}
+      - CALDAV_URL=${CALDAV_URL:-}
+      - CALDAV_USERNAME=${CALDAV_USERNAME:-}
+      - CALDAV_PASSWORD=${CALDAV_PASSWORD:-}
+      
+      # Storage
+      - UPLOAD_FOLDER=/uploads
+      
+      # Debug Mode
+      - DEBUG_MODE=${DEBUG_MODE:-false}
+      
+      # Customization
+      - SCIENTIFIC_WRITING_GUIDE=${SCIENTIFIC_WRITING_GUIDE:-}
+      
+      # Build Info (optional)
+      - GIT_COMMIT=${GIT_COMMIT:-}
+      - GIT_BRANCH=${GIT_BRANCH:-}
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080${SERVER_CONTEXT_PATH:-/cile/api}/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    
+    networks:
+      - thesis-network
+
+  client:
+    # For subpath deployment, you need to build with PUBLIC_PATH=/cile/
+    # See client.subpath.Dockerfile
+    build:
+      context: ./client
+      dockerfile: ../client.subpath.Dockerfile
+      args:
+        - PUBLIC_PATH=${PUBLIC_PATH:-/cile/}
+    image: "thesis-management-client:subpath"
+    container_name: thesis-management-client
+    restart: unless-stopped
+    
+    ports:
+      # Expose only to localhost - your reverse proxy should forward to this
+      - "127.0.0.1:3000:80"
+    
+    environment:
+      # Server URL (full public URL including subpath)
+      - SERVER_HOST=${SERVER_HOST:-https://ai-portal.sgu.edu/cile/api}
+      
+      # External Keycloak
+      - KEYCLOAK_HOST=${KEYCLOAK_HOST}
+      - KEYCLOAK_REALM_NAME=${KEYCLOAK_REALM_NAME:-thesis-management}
+      - KEYCLOAK_CLIENT_ID=${KEYCLOAK_CLIENT_ID:-thesis-management-app}
+      
+      # Application Customization
+      - APPLICATION_TITLE=${APPLICATION_TITLE:-CILE Thesis Management}
+      - CHAIR_NAME=${CHAIR_NAME:-Center for Innovation in Learning and Engagement}
+      - CHAIR_URL=${CHAIR_URL:-https://ai-portal.sgu.edu/cile}
+      
+      # Optional: Customize study programs
+      - STUDY_PROGRAMS=${STUDY_PROGRAMS:-}
+      - STUDY_DEGREES=${STUDY_DEGREES:-}
+      - THESIS_TYPES=${THESIS_TYPES:-}
+      - GENDERS=${GENDERS:-}
+      - LANGUAGES=${LANGUAGES:-}
+      - CUSTOM_DATA=${CUSTOM_DATA:-}
+      - THESIS_FILES=${THESIS_FILES:-}
+      
+      # Optional: Default supervisor
+      - DEFAULT_SUPERVISOR_UUID=${DEFAULT_SUPERVISOR_UUID:-}
+      
+      # Optional: Allow suggested topics
+      - ALLOW_SUGGESTED_TOPICS=${ALLOW_SUGGESTED_TOPICS:-}
+    
+    depends_on:
+      server:
+        condition: service_healthy
+    
+    networks:
+      - thesis-network
+
+networks:
+  thesis-network:
+    name: thesis-management-network
+    driver: bridge
+

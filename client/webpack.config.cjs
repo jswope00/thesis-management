@@ -84,7 +84,7 @@ const config = (env) => {
       sourceMapFilename: 'static/js/[name].[contenthash].js.map',
       chunkFilename: 'static/js/[name].[contenthash].js',
       assetModuleFilename: 'static/assets/[name].[hash][ext]',
-      publicPath: '/',
+      publicPath: process.env.PUBLIC_PATH || '/',
       crossOriginLoading: 'anonymous',
     },
     resolve: {
