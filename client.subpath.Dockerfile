@@ -23,13 +23,13 @@ ENV KEYCLOAK_CLIENT_ID=${KEYCLOAK_CLIENT_ID}
 ENV NODE_ENV=production
 
 # Copy package files
-COPY client/package*.json ./
+COPY package*.json ./
 
 # Install dependencies
 RUN npm ci --only=production
 
 # Copy source code
-COPY client/ ./
+COPY . ./
 
 # Build the application with PUBLIC_PATH
 RUN npm run build
@@ -38,13 +38,13 @@ RUN npm run build
 FROM nginx:1.27-alpine
 
 # Copy custom nginx configuration
-COPY client/nginx/nginx.subpath.conf /etc/nginx/conf.d/default.conf
+COPY nginx/nginx.subpath.conf /etc/nginx/conf.d/default.conf
 
 # Copy built files from build stage
 COPY --from=build /app/build /usr/share/nginx/html
 
 # Copy runtime environment script
-COPY client/public/generate-runtime-env.js /docker-entrypoint.d/01-generate-runtime-env.sh
+COPY public/generate-runtime-env.js /docker-entrypoint.d/01-generate-runtime-env.sh
 
 # Make the script executable
 RUN chmod +x /docker-entrypoint.d/01-generate-runtime-env.sh
