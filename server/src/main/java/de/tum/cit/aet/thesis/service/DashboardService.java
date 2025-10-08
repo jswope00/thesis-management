@@ -75,7 +75,7 @@ public class DashboardService {
 
             if (thesis.getStartDate() == null || thesis.getEndDate() == null) {
                 tasks.add(new TaskDto(
-                        "Add start and end date to thesis \"" + thesis.getTitle() + "\"",
+                        "Add start and end date to CILE project \"" + thesis.getTitle() + "\"",
                         getThesisLink(thesis),
                         50
                 ));
@@ -99,7 +99,7 @@ public class DashboardService {
             }
 
             tasks.add(new TaskDto(
-                    "Add a proposal to thesis \"" + thesis.getTitle() + "\"",
+                    "Add a proposal to CILE project \"" + thesis.getTitle() + "\"",
                     getThesisLink(thesis),
                     100
             ));
@@ -111,7 +111,7 @@ public class DashboardService {
             }
 
             tasks.add(new TaskDto(
-                    "A proposal was submitted to thesis \"" + thesis.getTitle() + "\". Please review and accept it or send feedback to the student.",
+                    "A proposal was submitted to CILE project \"" + thesis.getTitle() + "\". Please review and accept it or send feedback to the student.",
                     getThesisLink(thesis),
                     100
             ));
@@ -120,7 +120,7 @@ public class DashboardService {
         // thesis submission task
         for (Thesis thesis : thesisRepository.findActiveThesesForRole(user.getId(), researchGroupId, Set.of(ThesisRoleName.STUDENT), Set.of(ThesisState.WRITING))) {
             tasks.add(new TaskDto(
-                    "Submit your final thesis and presentation. You can check your submission deadline on the thesis page.",
+                    "Submit your final CILE Project and presentation. You can check your submission deadline on the Browse CILE Projects page.",
                     getThesisLink(thesis),
                     80
             ));
@@ -137,7 +137,7 @@ public class DashboardService {
             }
 
             tasks.add(new TaskDto(
-                    "Schedule a presentation date for thesis \"" + thesis.getTitle() + "\" with the advisor.",
+                    "Schedule a presentation date for CILE project \"" + thesis.getTitle() + "\" with the advisor.",
                     getThesisLink(thesis),
                     40
             ));
@@ -146,7 +146,7 @@ public class DashboardService {
         // thesis assessment task
         for (Thesis thesis : thesisRepository.findActiveThesesForRole(user.getId(), researchGroupId, Set.of(ThesisRoleName.ADVISOR), Set.of(ThesisState.SUBMITTED))) {
             tasks.add(new TaskDto(
-                    "Thesis \"" + thesis.getTitle() + "\" was submitted. Please review the thesis and add an assessment.",
+                    "Thesis \"" + thesis.getTitle() + "\" was submitted. Please review the CILE Project and add an assessment.",
                     getThesisLink(thesis),
                     100
             ));
@@ -155,7 +155,7 @@ public class DashboardService {
         // grade thesis task
         for (Thesis thesis : thesisRepository.findActiveThesesForRole(user.getId(),researchGroupId,  Set.of(ThesisRoleName.SUPERVISOR), Set.of(ThesisState.ASSESSED))) {
             tasks.add(new TaskDto(
-                    "Review assessment of thesis \"" + thesis.getTitle() + "\" and add a final grade.",
+                    "Review assessment of CILE project \"" + thesis.getTitle() + "\" and add a final grade.",
                     getThesisLink(thesis),
                     100
             ));
@@ -164,20 +164,20 @@ public class DashboardService {
         // close thesis task
         for (Thesis thesis : thesisRepository.findActiveThesesForRole(user.getId(), researchGroupId, Set.of(ThesisRoleName.SUPERVISOR), Set.of(ThesisState.GRADED))) {
             tasks.add(new TaskDto(
-                    "Thesis \"" + thesis.getTitle() + "\" is graded but not completed yet.",
+                    "CILE Project \"" + thesis.getTitle() + "\" is graded but not completed yet.",
                     getThesisLink(thesis),
                     20
             ));
         }
 
         if (user.hasAnyGroup("admin", "supervisor", "advisor")) {
-            // review application task
+            // review application task - only show applications where user is faculty advisor
             long unreviewedApplications =
-                applicationRepository.countUnreviewedApplications(user.getId(), researchGroupId);
+                applicationRepository.countUnreviewedApplicationsByFacultyAdvisor(user.getId());
 
             if (unreviewedApplications > 0) {
                 tasks.add(new TaskDto(
-                        "You have " + unreviewedApplications + " unreviewed applications.",
+                        "You have " + unreviewedApplications + " unreviewed applications where you are the faculty advisor.",
                         "/applications",
                         10
                 ));
@@ -186,13 +186,6 @@ public class DashboardService {
             // no open topic task
             long openTopics = topicRepository.countOpenTopics(researchGroupId);
 
-            if (openTopics == 0) {
-                tasks.add(new TaskDto(
-                        "There are currently no open Topics. Please create a topic.",
-                        "/topics",
-                        10
-                ));
-            }
         }
 
         tasks.sort(Comparator.comparingInt(a -> a.priority().intValue()));

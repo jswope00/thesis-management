@@ -70,6 +70,13 @@ public interface ApplicationRepository extends JpaRepository<Application, UUID> 
                                      @Param("researchGroupId") UUID researchGroupId);
 
     @Query("""
+            SELECT COUNT(DISTINCT a) FROM Application a
+              WHERE a.facultyAdvisor.id = :facultyAdvisorId AND
+                    a.state = 'NOT_ASSESSED'
+            """)
+    long countUnreviewedApplicationsByFacultyAdvisor(@Param("facultyAdvisorId") UUID facultyAdvisorId);
+
+    @Query("""
             SELECT EXISTS (
                 SELECT a FROM Application a
                 WHERE a.user.id = :userId AND a.state = 'NOT_ASSESSED' AND

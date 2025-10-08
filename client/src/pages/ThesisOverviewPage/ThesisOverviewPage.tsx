@@ -7,7 +7,7 @@ import { Stack, Title } from '@mantine/core'
 import { ThesisState } from '../../requests/responses/thesis'
 
 const ThesisOverviewPage = () => {
-  usePageTitle('Theses Overview')
+  usePageTitle('CILE Projects Overview')
 
   return (
     <ThesesProvider
@@ -16,13 +16,14 @@ const ThesisOverviewPage = () => {
         ThesisState.PROPOSAL,
         ThesisState.WRITING,
         ThesisState.SUBMITTED,
+        ThesisState.RESEARCH,
         ThesisState.ASSESSED,
         ThesisState.GRADED,
       ]}
       limit={200}
     >
       <Stack>
-        <Title>Theses Overview</Title>
+        <Title>CILE Projects Overview</Title>
         <ThesesFilters />
         <ThesesGanttChart />
       </Stack>

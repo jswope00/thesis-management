@@ -25,12 +25,13 @@ const DashboardPage = () => {
     <Stack gap='md'>
       <Title order={1}>Dashboard</Title>
       <MyTasksSection />
-      <ThesesProvider
+      {/* <ThesesProvider
         hideIfEmpty
         defaultStates={
           managementAccess
             ? [
                 ThesisState.PROPOSAL,
+                ThesisState.RESEARCH,
                 ThesisState.WRITING,
                 ThesisState.SUBMITTED,
                 ThesisState.ASSESSED,
@@ -44,7 +45,7 @@ const DashboardPage = () => {
           <Title order={2}>My CILE Projects</Title>
           {managementAccess ? <ThesesGanttChart /> : <ThesesTable />}
         </Stack>
-      </ThesesProvider>
+      </ThesesProvider> */}
       <ApplicationsProvider
         hideIfEmpty={true}
         limit={10}
