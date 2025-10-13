@@ -1,47 +1,47 @@
 services:
-  db:
+  pgdb:
     image: 'postgres:17.5-alpine'
-    container_name: thesis-management-db
+    container_name: pgdb 
+    env_file:
+      - .env
     volumes:
-      - ./db_backups:/db_backups
+      - ./initdb:/docker-entrypoint-initdb.d:ro
+      - ./postgres_db_backups:/db_backups
       - ./postgres_data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_USER=thesis-management-postgres
-      - POSTGRES_PASSWORD=thesis-management-postgres
-      - POSTGRES_DB=thesis-management
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -d thesis-management -U thesis-management-postgres"]
+      test: ["CMD-SHELL", "pg_isready -d postgres -U postgres"]
       interval: 5s
       timeout: 5s
       retries: 5
-    ports:
-      - "5144:5432"
-
-  #postfix:
-  #  image: ghcr.io/ls1admin/postfix:latest
-  #  container_name: thesis-management-postfix
-  #  restart: unless-stopped
-  #  volumes:
-  #    - ./postfix-config:/config # See https://github.com/ls1admin/postfix-container-tum-mailrelay/tree/main for details
-  #  hostname: localhost
-  #  ports:
-  #    - "25:25"
-
-  caldav:
-    image: tomsquest/docker-radicale:3.3.0.1
-    container_name: thesis-management-caldav
-    ports:
-      - "5232:5232"
-
+    
   keycloak:
-    image: quay.io/keycloak/keycloak:26.0
-    container_name: thesis-management-keycloak
-    environment:
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
-    entrypoint: /opt/keycloak/bin/kc.sh start-dev
+    image: quay.io/keycloak/keycloak
+    container_name: keycloak
+    command:
+      - start-dev
+    env_file:
+     - .env
     ports:
-      - "8081:8080"
+      - "4000:8080"
+    restart: unless-stopped
 
-volumes:
-  postgres_data:
+
+  thesis-server:
+    container_name: thesis-server
+    env_file:
+     - .env
+    build:
+      context: .              
+      dockerfile: Dockerfile.server
+    ports:
+      - "18080:8080"
+
+  thesis-client:
+    container_name: thesis-client
+    env_file:
+     - .env
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    ports:
+      - "18081:80"
