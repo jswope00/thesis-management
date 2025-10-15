@@ -13,6 +13,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    restart: always 
     
   keycloak:
     image: quay.io/keycloak/keycloak
@@ -23,7 +24,7 @@ services:
      - .env
     ports:
       - "4000:8080"
-    restart: unless-stopped
+    restart: always
 
 
   thesis-server:
@@ -34,7 +35,8 @@ services:
       context: .              
       dockerfile: Dockerfile.server
     ports:
-      - "18080:8080"
+      - "8080:8080"
+    restart: always
 
   thesis-client:
     container_name: thesis-client
@@ -44,4 +46,5 @@ services:
       context: .
       dockerfile: Dockerfile.client
     ports:
-      - "18081:80"
+      - "3000:80"
+    restart: always    
