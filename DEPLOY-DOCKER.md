@@ -2,7 +2,7 @@
 
 ## Environemnt file
 
-there must be a single `.env` file for all databases that is used by `docker-compose` while building and startup of containers. For example values check `.env-example`.
+there must be a single `.env` file for all containers that is used by `docker-compose` while building and startup of containers. For example values check `.env-example`.
 
 
 ## NGINX
