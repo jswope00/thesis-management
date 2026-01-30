@@ -24,8 +24,7 @@ $$
         SELECT user_id
         INTO head_id
         FROM users
-        WHERE university_id = 'SGU' -- university_id and user_id (DEV and PROD) of Prof. Krusche
-          AND user_id IN ('admin_supervisor', '69fa250e-f4eb-435f-b1fb-2cff8d051e32')
+        WHERE user_id IN ('2da5d9ac-86d5-45d8-8478-8710a1a0f22b')
         LIMIT 1;
 
         IF head_id IS NOT NULL THEN

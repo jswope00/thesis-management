@@ -52,7 +52,10 @@ spring:
           protocol: smtp
         smtp:
           starttls:
-            enable: true
+            enable: false
+            required: false
+          ssl:
+            enable: false
 
 management:
   endpoints:
@@ -94,6 +97,16 @@ thesis-management:
     signature: ${MAIL_SIGNATURE:}
     workspace-url: ${MAIL_WORKSPACE_URL:https://slack.com}
     bcc-recipients: ${MAIL_BCC_RECIPIENTS:}
+    properties:
+      mail:
+        transport:
+          protocol: smtp
+        smtp:
+          starttls:
+            enable: false
+            required: false
+          ssl:
+            enable: false
   storage:
     upload-location: ${UPLOAD_FOLDER:uploads}
   scientific-writing-guide: ${SCIENTIFIC_WRITING_GUIDE:}
