@@ -1,9 +1,11 @@
 services:
   pgdb:
-    image: 'postgres:17.5-alpine'
+    image: 'postgres:17.7-alpine'
     container_name: pgdb 
     env_file:
       - .env
+    ports:
+      - "5144:5432"
     volumes:
       - ./initdb:/docker-entrypoint-initdb.d:ro
       - ./postgres_db_backups:/db_backups
@@ -17,13 +19,16 @@ services:
     
   keycloak:
     image: quay.io/keycloak/keycloak
-    container_name: keycloak
+    container_name: cile-keycloak
     command:
       - start-dev
     env_file:
      - .env
     ports:
-      - "4000:8080"
+      - "8081:8080"
+    depends_on:
+      pgdb:
+        condition: service_healthy
     restart: always
 
 
@@ -36,6 +41,9 @@ services:
       dockerfile: Dockerfile.server
     ports:
       - "8080:8080"
+    depends_on:
+      pgdb:
+        condition: service_healthy
     restart: always
 
   thesis-client:

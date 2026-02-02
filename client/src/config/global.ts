@@ -128,7 +128,7 @@ export const GLOBAL_CONFIG: IGlobalConfig = {
   server_host: getEnvironmentVariable('SERVER_HOST') || 'http://localhost:8080',
 
   keycloak: {
-    host: getEnvironmentVariable('KEYCLOAK_HOST') || 'http://localhost:8081',
+    host: getEnvironmentVariable('KEYCLOAK_EXTERNAL_HOST') || 'http://localhost:8081',
     realm: getEnvironmentVariable('KEYCLOAK_REALM_NAME') || 'thesis-management',
     client_id: getEnvironmentVariable('KEYCLOAK_CLIENT_ID') || 'thesis-management-app',
   },
