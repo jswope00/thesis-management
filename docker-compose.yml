@@ -52,7 +52,27 @@ services:
      - .env
     build:
       context: .
+      dockerfile: Dockerfile.client.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/app/client
+      - /app/client/node_modules
+    restart: always
+    # Default: Development mode with hot reloading
+    # For production: docker-compose stop thesis-client && docker-compose --profile prod up thesis-client-prod
+
+  thesis-client-prod:
+    container_name: thesis-client
+    env_file:
+     - .env
+    build:
+      context: .
       dockerfile: Dockerfile.client
     ports:
       - "3000:80"
-    restart: always    
+    restart: always
+    profiles:
+      - prod
+    # Production mode with built static files
+    # Note: Stop thesis-client first if running, then use: docker-compose --profile prod up thesis-client-prod    
