@@ -3,6 +3,7 @@ const { promises: fsp } = require('fs')
 const ALLOWED_ENVIRONMENT_VARIABLES = [
   'SERVER_HOST',
   'KEYCLOAK_HOST',
+  'KEYCLOAK_EXTERNAL_HOST',
   'KEYCLOAK_REALM_NAME',
   'KEYCLOAK_CLIENT_ID',
   'CHAIR_NAME',
