@@ -14,7 +14,7 @@ import ThesisFeedbackOverview from '../ThesisFeedbackOverview/ThesisFeedbackOver
 import AuthenticatedFilePreview from '../../../../components/AuthenticatedFilePreview/AuthenticatedFilePreview'
 import UploadFileButton from '../../../../components/UploadFileButton/UploadFileButton'
 import FileHistoryTable from '../FileHistoryTable/FileHistoryTable'
-import { isThesisClosed } from '../../../../utils/thesis'
+import { checkMinimumThesisState, isThesisClosed } from '../../../../utils/thesis'
 import { useState } from 'react'
 
 const ThesisResearchSection = () => {
@@ -62,6 +62,10 @@ const ThesisResearchSection = () => {
     } else {
       showSimpleError(getApiResponseErrorMessage(response))
     }
+  }
+
+  if (!checkMinimumThesisState(thesis, ThesisState.RESEARCH)) {
+    return <></>
   }
 
   const research = thesis.research[0]
