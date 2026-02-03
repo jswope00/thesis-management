@@ -1,0 +1,25 @@
+FROM gradle:8.11.1-jdk21
+
+WORKDIR /app
+
+# Copy gradle files first for better caching
+COPY server/gradle ./server/gradle
+COPY server/gradlew ./server/
+COPY server/gradle.properties ./server/
+COPY server/build.gradle ./server/
+COPY server/settings.gradle ./server/
+
+# Copy the entire project for context (needed for git properties plugin)
+COPY . .
+
+WORKDIR /app/server
+
+# Pre-download dependencies (this layer will be cached)
+RUN ./gradlew dependencies --no-daemon || true
+
+# Expose server port
+EXPOSE 8080
+
+# Run with bootRun and continuous build for automatic recompilation
+# Spring Boot DevTools will detect class changes and restart automatically
+CMD ["./gradlew", "bootRun", "--continuous", "--no-daemon"]

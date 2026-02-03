@@ -78,22 +78,11 @@ const ApplicationData = (props: IApplicationDataProps) => {
             </Grid.Col>
             <Grid.Col span={{ xs: 4, sm: 3 }}>
               <LabeledItem
-                label='Enrollment Date'
-                value={formatDate(application.user.enrolledAt || '', { withTime: false })}
-              />
-            </Grid.Col>
-            <Grid.Col span={{ xs: 4, sm: 3 }}>
-              <LabeledItem
                 label='Expected Graduation'
                 value={enrollmentDateToSemester(application.user.enrolledAt || '')}
               />
             </Grid.Col>
-            <Grid.Col span={{ xs: 4, sm: 3 }}>
-              <LabeledItem
-                label='Desired Start Date'
-                value={formatDate(application.desiredStartDate, { withTime: false })}
-              />
-            </Grid.Col>
+
             <Grid.Col span={{ xs: 4, sm: 3 }}>
               <LabeledItem label='CILE Format' value={formatThesisType(application.thesisType)} />
             </Grid.Col>

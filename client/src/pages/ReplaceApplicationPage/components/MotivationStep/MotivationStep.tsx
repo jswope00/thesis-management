@@ -1,12 +1,12 @@
 import { ITopic } from '../../../../requests/responses/topic'
 import { isNotEmpty, useForm } from '@mantine/form'
 import { Accordion, Button, Select, Stack, TextInput } from '@mantine/core'
+import { DateInput, DateValue } from '@mantine/dates'
 import DocumentEditor from '../../../../components/DocumentEditor/DocumentEditor'
 import { useEffect, useState } from 'react'
 import { doRequest } from '../../../../requests/request'
 import { showSimpleError } from '../../../../utils/notification'
 import { getApiResponseErrorMessage } from '../../../../requests/handler'
-import { DateInput, DateValue } from '@mantine/dates'
 import { getHtmlTextLength } from '../../../../utils/validation'
 import { GLOBAL_CONFIG } from '../../../../config/global'
 import { IApplication } from '../../../../requests/responses/application'
@@ -27,8 +27,8 @@ interface IMotivationStepForm {
   researchGroupId: string
   facultyAdvisorId: string
   thesisType: string | null
-  desiredStartDate: DateValue
   motivation: string
+  desiredStartDate: DateValue | null
 }
 
 const MotivationStep = (props: IMotivationStepProps) => {
@@ -46,8 +46,8 @@ const MotivationStep = (props: IMotivationStepProps) => {
       researchGroupId: '',
       facultyAdvisorId: '',
       thesisType: null,
-      desiredStartDate: new Date(),
       motivation: '',
+      desiredStartDate: new Date(),
     },
     validateInputOnBlur: true,
     validate: {
@@ -59,10 +59,9 @@ const MotivationStep = (props: IMotivationStepProps) => {
       researchGroupId: isNotEmpty('Please select a research group'),
       facultyAdvisorId: isNotEmpty('Please select a faculty advisor'),
       thesisType: isNotEmpty('Please state your CILE format'),
-      desiredStartDate: isNotEmpty('Please state your desired start date'),
       motivation: (value) => {
         if (!value) {
-          return 'Please submit a draft introduction for your CILE project.'
+          return 'Please submit additional details before submitting your application.'
         } else if (getHtmlTextLength(value) > 10000) {
           return 'The maximum allowed number of characters is 10000'
         }
@@ -74,11 +73,11 @@ const MotivationStep = (props: IMotivationStepProps) => {
     if (application) {
       form.setValues({
         motivation: application.motivation,
-        desiredStartDate: new Date(application.desiredStartDate),
         thesisType: application.thesisType,
         thesisTitle: application.thesisTitle ?? '',
         researchGroupId: application.researchGroup.id,
         facultyAdvisorId: application.facultyAdvisor?.userId || '',
+        desiredStartDate: application.desiredStartDate ? new Date(application.desiredStartDate) : new Date(),
       })
     }
   }, [application?.applicationId])
@@ -150,8 +149,8 @@ const MotivationStep = (props: IMotivationStepProps) => {
             facultyAdvisorId: values.facultyAdvisorId,
             thesisTitle: values.thesisTitle || null,
             thesisType: values.thesisType,
-            desiredStartDate: values.desiredStartDate,
             motivation: values.motivation,
+            desiredStartDate: values.desiredStartDate || new Date(),
           },
         },
       )
@@ -208,12 +207,12 @@ const MotivationStep = (props: IMotivationStepProps) => {
           {...form.getInputProps('thesisType')}
         />
         <DateInput
-          label='Desired Start Date'
-          required={true}
+          label='Submission Date'
+          disabled={true}
           {...form.getInputProps('desiredStartDate')}
         />
         <DocumentEditor
-          label='Submit Draft CILE Introduction'
+          label='Please provide additional details about why you are interested in this topic, and/or other topics that you might also be interested in.'
           required={true}
           editMode={true}
           maxLength={10000}

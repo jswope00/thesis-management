@@ -38,13 +38,39 @@ services:
      - .env
     build:
       context: .              
-      dockerfile: Dockerfile.server
+      dockerfile: Dockerfile.server.dev
     ports:
       - "8080:8080"
+    volumes:
+      - ./server:/app/server
+      - /app/server/.gradle
+      - ./server/uploads:/app/server/uploads
     depends_on:
       pgdb:
         condition: service_healthy
     restart: always
+    # Default: Development mode with hot reloading via Spring Boot DevTools
+    # For production: docker-compose stop thesis-server && docker-compose --profile prod up thesis-server-prod
+
+  thesis-server-prod:
+    container_name: thesis-server
+    env_file:
+     - .env
+    build:
+      context: .              
+      dockerfile: Dockerfile.server
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./thesis_uploads:/uploads
+    depends_on:
+      pgdb:
+        condition: service_healthy
+    restart: always
+    profiles:
+      - prod
+    # Production mode with built JAR
+    # Note: Stop thesis-server first if running, then use: docker-compose --profile prod up thesis-server-prod
 
   thesis-client:
     container_name: thesis-client

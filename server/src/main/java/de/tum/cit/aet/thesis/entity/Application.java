@@ -60,8 +60,7 @@ public class Application {
   @Column(name = "state", nullable = false)
   private ApplicationState state;
 
-  @NotNull
-  @Column(name = "desired_start_date", nullable = false)
+  @Column(name = "desired_start_date", nullable = true)
   private Instant desiredStartDate;
 
   @NotNull

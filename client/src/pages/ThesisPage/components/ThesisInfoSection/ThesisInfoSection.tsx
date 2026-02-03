@@ -83,15 +83,9 @@ const ThesisInfoSection = () => {
                 ))}
               </Stack>
             )}
+
             <DocumentEditor
-              label='Abstract'
-              value={abstractText}
-              editMode={editMode}
-              onChange={(e) => setAbstractText(e.target.value)}
-              maxLength={2000}
-            />
-            <DocumentEditor
-              label='Additional Information (Important links, repositories etc.)'
+              label='Additional Notes / Supporting Literature'
               value={infoText}
               editMode={editMode}
               onChange={(e) => setInfoText(e.target.value)}

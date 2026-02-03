@@ -168,6 +168,11 @@ public class ThesisService {
         thesis.setCreatedAt(Instant.now());
         thesis.setResearchGroup(researchGroup);
 
+        // Copy desiredStartDate from application to startDate if available
+        if (application != null && application.getDesiredStartDate() != null) {
+            thesis.setStartDate(application.getDesiredStartDate());
+        }
+
         thesis = thesisRepository.save(thesis);
 
         assignThesisRoles(thesis, supervisorIds, advisorIds, studentIds);

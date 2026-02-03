@@ -59,7 +59,7 @@ const ThesesFilters = () => {
       <Grid.Col span={6}>
         <TextInput
           label='Search'
-          placeholder='Search theses...'
+          placeholder='Search projects...'
           leftSection={<MagnifyingGlass size={16} />}
           value={filters.search || ''}
           onChange={(x) => setFilters((prev) => ({ ...prev, search: x.target.value || undefined }))}
@@ -105,7 +105,7 @@ const ThesesFilters = () => {
         <MultiSelect
           hidePickedOptions
           label='State'
-          placeholder='Thesis States'
+          placeholder='Project States'
           data={Object.values(ThesisState).map((value) => ({
             value: value,
             label: formatThesisState(value),

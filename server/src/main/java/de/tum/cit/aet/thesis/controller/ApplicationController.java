@@ -67,7 +67,7 @@ public class ApplicationController {
                         StringLimits.THESIS_TITLE.getLimit()),
                 RequestValidator.validateStringMaxLength(payload.thesisType(),
                         StringLimits.THESIS_TITLE.getLimit()),
-                RequestValidator.validateNotNull(payload.desiredStartDate()),
+                payload.desiredStartDate(),
                 RequestValidator.validateStringMaxLength(payload.motivation(),
                         StringLimits.LONGTEXT.getLimit()),
                 payload.facultyAdvisorId()
@@ -154,7 +154,7 @@ public class ApplicationController {
                 payload.topicId(),
                 RequestValidator.validateStringMaxLengthAllowNull(payload.thesisTitle(), StringLimits.THESIS_TITLE.getLimit()),
                 RequestValidator.validateStringMaxLength(payload.thesisType(), StringLimits.THESIS_TITLE.getLimit()),
-                RequestValidator.validateNotNull(payload.desiredStartDate()),
+                payload.desiredStartDate(),
                 RequestValidator.validateStringMaxLength(payload.motivation(), StringLimits.LONGTEXT.getLimit()),
                 payload.facultyAdvisorId()
         );
