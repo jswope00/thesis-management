@@ -40,7 +40,7 @@ spring:
       resourceserver:
         jwt:
           jwk-set-uri: ${KEYCLOAK_HOST:http://localhost:8081}/realms/${KEYCLOAK_REALM_NAME:thesis-management}/protocol/openid-connect/certs
-          issuer-uri: ${KEYCLOAK_HOST:http://localhost:8081}/realms/${KEYCLOAK_REALM_NAME:thesis-management}
+          issuer-uri: ${KEYCLOAK_EXTERNAL_HOST:${KEYCLOAK_HOST:http://localhost:8081}}/realms/${KEYCLOAK_REALM_NAME:thesis-management}
   mail:
     host: ${POSTFIX_HOST:localhost}
     port: ${POSTFIX_PORT:25}

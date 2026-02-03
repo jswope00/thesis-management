@@ -172,9 +172,10 @@ public class AccessManagementService {
 
     private void removeKeycloakRole(UUID userId, String roleName) {
         Role roleObject = getClientRoleByName(roleName);
+        UUID clientUUID = getApplicationClientUUID();
 
         webClient.method(HttpMethod.DELETE)
-                .uri("/admin/realms/" + keycloakRealmName + "/users/" + userId + "/role-mappings/clients/" + applicationClientUUID)
+                .uri("/admin/realms/" + keycloakRealmName + "/users/" + userId + "/role-mappings/clients/" + clientUUID)
                 .headers(headers -> headers.addAll(getAuthenticationHeaders()))
                 .bodyValue(List.of(roleObject))
                 .retrieve()
@@ -188,9 +189,10 @@ public class AccessManagementService {
         }
 
         Role roleObject = getClientRoleByName(role);
+        UUID clientUUID = getApplicationClientUUID();
 
         webClient.post()
-                .uri("/admin/realms/" + keycloakRealmName + "/users/" + userId + "/role-mappings/clients/" + applicationClientUUID)
+                .uri("/admin/realms/" + keycloakRealmName + "/users/" + userId + "/role-mappings/clients/" + clientUUID)
                 .headers(headers -> headers.addAll(getAuthenticationHeaders()))
                 .bodyValue(List.of(roleObject))
                 .retrieve()
@@ -205,10 +207,11 @@ public class AccessManagementService {
         }
 
         UUID keycloakUserId = getUserId(user.getUniversityId());
+        UUID clientUUID = getApplicationClientUUID();
 
         // Fetch all client roles from Keycloak for the given user
         List<Role> keycloakRoles = webClient.get()
-                .uri("/admin/realms/" + keycloakRealmName + "/users/" + keycloakUserId + "/role-mappings/clients/" + applicationClientUUID)
+                .uri("/admin/realms/" + keycloakRealmName + "/users/" + keycloakUserId + "/role-mappings/clients/" + clientUUID)
                 .headers(headers -> headers.addAll(getAuthenticationHeaders()))
                 .retrieve()
                 .bodyToFlux(Role.class)
@@ -242,8 +245,10 @@ public class AccessManagementService {
     private record Role(String id, String name, String description, boolean composite, boolean clientRole, String containerId) {}
 
     private Role getClientRoleByName(String roleName) {
+        UUID clientUUID = getApplicationClientUUID();
+        log.debug("Fetching role '{}' for client UUID: {}", roleName, clientUUID);
         return webClient.get()
-                .uri("/admin/realms/" + keycloakRealmName + "/clients/" + applicationClientUUID + "/roles/" + roleName)
+                .uri("/admin/realms/" + keycloakRealmName + "/clients/" + clientUUID + "/roles/" + roleName)
                 .headers(headers -> headers.addAll(getAuthenticationHeaders()))
                 .retrieve()
                 .bodyToMono(Role.class)
@@ -311,6 +316,7 @@ public class AccessManagementService {
             throw new IllegalStateException("Client ID or service client secret is not configured");
         }
         
+        log.debug("Fetching client UUID for clientId: {}", clientId);
         ClientElement client = webClient.method(HttpMethod.GET)
                 .uri(uriBuilder -> uriBuilder
                         .path("/admin/realms/" + keycloakRealmName + "/clients")
@@ -327,6 +333,7 @@ public class AccessManagementService {
         }
 
         applicationClientUUID = client.id();
+        log.debug("Client UUID fetched successfully: {}", applicationClientUUID);
         return applicationClientUUID;
     }
 
