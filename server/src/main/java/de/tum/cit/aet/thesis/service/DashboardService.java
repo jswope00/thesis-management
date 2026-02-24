@@ -57,15 +57,15 @@ public class DashboardService {
         }
 
         // general student tasks
-        for (Thesis thesis : thesisRepository.findActiveThesesForRole(user.getId(), researchGroupId, Set.of(ThesisRoleName.STUDENT), null)) {
-            if (thesis.getAbstractField().isBlank() || thesis.getInfo().isBlank()) {
-                tasks.add(new TaskDto(
-                        "Add the abstract and additional information to thesis \"" + thesis.getTitle() + "\" [DEBUG: abstractField=\"" + thesis.getAbstractField() + "\", info=\"" + thesis.getInfo() + "\"]",
-                        getThesisLink(thesis),
-                        50
-                ));
-            }
-        }
+        //for (Thesis thesis : thesisRepository.findActiveThesesForRole(user.getId(), researchGroupId, Set.of(ThesisRoleName.STUDENT), null)) {
+            //if (thesis.getAbstractField().isBlank() || thesis.getInfo().isBlank()) {
+            //    tasks.add(new TaskDto(
+            //            "Add the abstract and additional information to thesis \"" + thesis.getTitle() + "\" [DEBUG: abstractField=\"" + thesis.getAbstractField() + "\", info=\"" + thesis.getInfo() + "\"]",
+            //            getThesisLink(thesis),
+            //            50
+                //));
+            //}
+        //}
 
         // general advisor, supervisor tasks
         for (Thesis thesis : thesisRepository.findActiveThesesForRole(user.getId(), researchGroupId, Set.of(ThesisRoleName.ADVISOR), null)) {
