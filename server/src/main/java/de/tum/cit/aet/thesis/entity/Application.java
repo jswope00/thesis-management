@@ -71,6 +71,9 @@ public class Application {
   @Column(name = "reject_reason")
   private ApplicationRejectReason rejectReason;
 
+  @Column(name = "reject_comment")
+  private String rejectComment;
+
   @CreationTimestamp
   @NotNull
   @Column(name = "created_at", nullable = false)

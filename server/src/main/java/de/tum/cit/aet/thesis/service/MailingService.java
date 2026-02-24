@@ -107,6 +107,7 @@ public class MailingService {
                 .addPrimaryRecipient(application.getUser())
                 .addDefaultBccRecipients(application.getResearchGroup().getHead().getEmail())
                 .fillApplicationPlaceholders(application)
+                .fillPlaceholder("rejectComment", application.getRejectComment() != null ? application.getRejectComment() : "")
                 .send(javaMailSender, uploadService);
     }
 

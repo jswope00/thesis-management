@@ -18,6 +18,7 @@ export interface IApplication {
   state: ApplicationState
   desiredStartDate: string
   comment: string
+  rejectComment: string | null
   createdAt: string
   reviewers: Array<{
     user: ILightUser

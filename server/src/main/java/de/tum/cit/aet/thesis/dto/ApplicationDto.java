@@ -20,6 +20,7 @@ public record ApplicationDto(
     Instant desiredStartDate,
     String comment,
     ApplicationRejectReason rejectReason,
+    String rejectComment,
     Instant createdAt,
     List<ApplicationReviewerDto> reviewers,
     Instant reviewedAt,
@@ -45,6 +46,7 @@ public record ApplicationDto(
         application.getDesiredStartDate(),
         protectedData ? application.getComment() : null,
         application.getRejectReason(),
+        application.getRejectComment(),
         application.getCreatedAt(),
         protectedData ? application.getReviewers().stream()
             .map(ApplicationReviewerDto::fromApplicationReviewerEntity).toList() : null,

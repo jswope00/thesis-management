@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import de.tum.cit.aet.thesis.security.CurrentUserProvider;
+import de.tum.cit.aet.thesis.constants.ApplicationRejectReason;
 import de.tum.cit.aet.thesis.constants.ApplicationState;
 import de.tum.cit.aet.thesis.constants.StringLimits;
 import de.tum.cit.aet.thesis.controller.payload.*;
@@ -244,11 +245,16 @@ public class ApplicationController {
             throw new AccessDeniedException("You do not have access to reject this application");
         }
 
+        ApplicationRejectReason reason = Boolean.TRUE.equals(payload.rejectAll())
+                ? ApplicationRejectReason.FAILED_STUDENT_REQUIREMENTS
+                : ApplicationRejectReason.NO_CAPACITY;
+
         List<Application> applications = applicationService.reject(
                 authenticatedUser,
                 application,
-                RequestValidator.validateNotNull(payload.reason()),
-                RequestValidator.validateNotNull(payload.notifyUser())
+                reason,
+                RequestValidator.validateNotNull(payload.notifyUser()),
+                payload.comment()
         );
 
         return ResponseEntity.ok(

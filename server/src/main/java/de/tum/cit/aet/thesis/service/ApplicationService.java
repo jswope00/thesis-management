@@ -219,10 +219,19 @@ public class ApplicationService {
 
     @Transactional
     public List<Application> reject(User reviewingUser, Application application, ApplicationRejectReason reason, boolean notifyUser) {
+        return reject(reviewingUser, application, reason, notifyUser, null);
+    }
+
+    @Transactional
+    public List<Application> reject(User reviewingUser, Application application, ApplicationRejectReason reason, boolean notifyUser, String rejectComment) {
         currentUserProvider().assertCanAccessResearchGroup(application.getResearchGroup());
         application.setState(ApplicationState.REJECTED);
         application.setRejectReason(reason);
         application.setReviewedAt(Instant.now());
+
+        if (rejectComment != null && !rejectComment.isBlank()) {
+            application.setRejectComment(rejectComment);
+        }
 
         application = reviewApplication(application, reviewingUser, ApplicationReviewReason.NOT_INTERESTED);
 
@@ -236,6 +245,10 @@ public class ApplicationService {
                     item.setState(ApplicationState.REJECTED);
                     item.setRejectReason(reason);
                     item.setReviewedAt(Instant.now());
+
+                    if (rejectComment != null && !rejectComment.isBlank()) {
+                        item.setRejectComment(rejectComment);
+                    }
 
                     item = reviewApplication(item, reviewingUser, ApplicationReviewReason.NOT_INTERESTED);
 

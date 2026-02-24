@@ -1,5 +1,5 @@
-import { IApplication } from '../../requests/responses/application'
-import { Stack, Group, Grid, Title, Badge, Accordion } from '@mantine/core'
+import { ApplicationState, IApplication } from '../../requests/responses/application'
+import { Stack, Group, Grid, Title, Badge, Accordion, Alert } from '@mantine/core'
 import React, { ReactNode } from 'react'
 import { GLOBAL_CONFIG } from '../../config/global'
 import { AVAILABLE_COUNTRIES } from '../../config/countries'
@@ -108,6 +108,13 @@ const ApplicationData = (props: IApplicationDataProps) => {
                   label='Reviewed At'
                   value={formatDate(application.reviewedAt, { withTime: true })}
                 />
+              </Grid.Col>
+            )}
+            {application.state === ApplicationState.REJECTED && application.rejectComment && (
+              <Grid.Col span={12}>
+                <Alert color='red' title='Rejection Comment'>
+                  {application.rejectComment}
+                </Alert>
               </Grid.Col>
             )}
             {application.user.customData &&

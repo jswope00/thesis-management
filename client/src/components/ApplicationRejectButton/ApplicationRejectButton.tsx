@@ -1,12 +1,12 @@
 import { doRequest } from '../../requests/request'
 import { ApplicationState, IApplication } from '../../requests/responses/application'
 import { showSimpleError, showSimpleSuccess } from '../../utils/notification'
-import { Button, Checkbox, Modal, Radio, Stack, Text } from '@mantine/core'
+import { Button, Checkbox, Modal, Stack, Text, Textarea } from '@mantine/core'
 import React, { useEffect, useState } from 'react'
 import { ButtonProps } from '@mantine/core/lib/components/Button/Button'
 import { useApplicationsContextUpdater } from '../../providers/ApplicationsProvider/hooks'
 import { getApiResponseErrorMessage } from '../../requests/handler'
-import { isNotEmpty, useForm } from '@mantine/form'
+import { useForm } from '@mantine/form'
 
 interface IApplicationRejectButtonProps extends ButtonProps {
   application: IApplication
@@ -15,7 +15,8 @@ interface IApplicationRejectButtonProps extends ButtonProps {
 
 interface IFormValues {
   notifyUser: boolean
-  reason: string | null
+  comment: string
+  rejectAll: boolean
 }
 
 const ApplicationRejectButton = (props: IApplicationRejectButtonProps) => {
@@ -30,11 +31,8 @@ const ApplicationRejectButton = (props: IApplicationRejectButtonProps) => {
     mode: 'controlled',
     initialValues: {
       notifyUser: true,
-      reason: application.topic ? 'FAILED_TOPIC_REQUIREMENTS' : 'TITLE_NOT_INTERESTING',
-    },
-    validateInputOnBlur: true,
-    validate: {
-      reason: isNotEmpty('Reason is required'),
+      comment: '',
+      rejectAll: false,
     },
   })
 
@@ -56,8 +54,9 @@ const ApplicationRejectButton = (props: IApplicationRejectButtonProps) => {
           method: 'PUT',
           requiresAuth: true,
           data: {
-            reason: values.reason,
+            comment: values.comment || null,
             notifyUser: values.notifyUser,
+            rejectAll: values.rejectAll,
           },
         },
       )
@@ -86,26 +85,6 @@ const ApplicationRejectButton = (props: IApplicationRejectButtonProps) => {
     }
   }
 
-  const reasons: Array<{ value: string; label: string }> = [
-    application.topic
-      ? {
-          value: 'FAILED_TOPIC_REQUIREMENTS',
-          label: 'Topic requirements not met',
-        }
-      : {
-          value: 'TITLE_NOT_INTERESTING',
-          label: 'Suggested topic is not interesting',
-        },
-    {
-      value: 'NO_CAPACITY',
-      label: 'No capacity at the moment',
-    },
-    {
-      value: 'FAILED_STUDENT_REQUIREMENTS',
-      label: 'General requirements not met (This will reject all applications of this student!)',
-    },
-  ]
-
   return (
     <Button
       {...buttonProps}
@@ -122,14 +101,15 @@ const ApplicationRejectButton = (props: IApplicationRejectButtonProps) => {
       >
         <form>
           <Stack>
-            <Text>Please specify a reason why you want to reject the student</Text>
-            <Radio.Group label='Reason' required {...form.getInputProps('reason')}>
-              <Stack gap='cs'>
-                {reasons.map((reason) => (
-                  <Radio key={reason.value} value={reason.value} label={reason.label} />
-                ))}
-              </Stack>
-            </Radio.Group>
+            <Text>Please specify a reason why you want to reject the application</Text>
+            <Textarea
+              label='Rejection Comment'
+              placeholder='Provide a reason or additional context for the student...'
+              autosize
+              minRows={3}
+              maxRows={8}
+              {...form.getInputProps('comment')}
+            />
             <Checkbox
               label='Notify Student'
               required
@@ -138,7 +118,6 @@ const ApplicationRejectButton = (props: IApplicationRejectButtonProps) => {
             <Button
               onClick={() => onReject(form.getValues())}
               loading={loading}
-              disabled={!form.isValid()}
               fullWidth
             >
               Reject Application

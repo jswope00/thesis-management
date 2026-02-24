@@ -239,6 +239,10 @@ I have carefully reviewed your application and supporting documents.
 It is with regret that I inform you that I am unable to supervise your thesis.
 The volume of applications received this year was exceptionally high, and I have limited capacity to ensure each student receives the appropriate level of support and guidance.
 </p>
+<p th:if="${rejectComment != null and !#strings.isEmpty(rejectComment)}" th:inline="text">
+<strong>Additional Information:</strong><br/>
+[[${rejectComment}]]
+</p>
 <p th:inline="text">
 I recommend reaching out to other faculty members who may align more closely with your qualifications and area of interest.
 </p>
@@ -261,6 +265,10 @@ I recommend considering other thesis topics or reaching out to faculty members w
 Thank you for your interest in pursuing your thesis under my supervision.
 I have carefully reviewed your application and supporting documents.
 Unfortunately, I must inform you that you do not currently meet the necessary requirements for thesis supervision under my guidance.
+</p>
+<p th:if="${rejectComment != null and !#strings.isEmpty(rejectComment)}" th:inline="text">
+<strong>Additional Information:</strong><br/>
+[[${rejectComment}]]
 </p>
 <p th:inline="text">
 I recommend reaching out to other faculty members who may align more closely with your qualifications and area of interest.
