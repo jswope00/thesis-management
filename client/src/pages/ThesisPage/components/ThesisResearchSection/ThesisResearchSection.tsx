@@ -97,7 +97,7 @@ const ThesisResearchSection = () => {
                       research.filename,
                       thesis.research.length,
                     )}
-                    type='pdf'
+                    type='any'
                     aspectRatio={16 / 6}
                     actionButton={
                       ((access.student && thesis.state === ThesisState.RESEARCH) || access.advisor) &&
@@ -105,7 +105,7 @@ const ThesisResearchSection = () => {
                         <UploadFileButton
                           onUpload={onUpload}
                           maxSize={25 * 1024 * 1024}
-                          accept='pdf'
+                          accept='document'
                           ml='auto'
                         >
                           Upload Research Methods
@@ -119,7 +119,7 @@ const ThesisResearchSection = () => {
                 <Stack>
                   <Text ta='center'>No research methods uploaded yet</Text>
                   <Center>
-                    <UploadFileButton onUpload={onUpload} maxSize={25 * 1024 * 1024} accept='pdf'>
+                    <UploadFileButton onUpload={onUpload} maxSize={25 * 1024 * 1024} accept='document'>
                       Upload Research Methods
                     </UploadFileButton>
                   </Center>
@@ -139,7 +139,7 @@ const ThesisResearchSection = () => {
                       thesis.research.length - index,
                     ),
                     url: `/v2/theses/${thesis.thesisId}/research/${row.researchId}`,
-                    type: 'pdf',
+                    type: 'any',
                     uploadedBy: row.createdBy,
                     uploadedAt: row.createdAt,
                     name: `Research Methods v${thesis.research.length - index}`,

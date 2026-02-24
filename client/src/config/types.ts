@@ -54,4 +54,4 @@ export interface IGlobalConfig {
   }
 }
 
-export type UploadFileType = 'pdf' | 'image' | 'any'
+export type UploadFileType = 'pdf' | 'image' | 'any' | 'document'

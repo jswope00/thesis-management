@@ -73,8 +73,8 @@ const ThesisWritingSection = () => {
     ...GLOBAL_CONFIG.thesis_files,
     THESIS: {
       label: 'CILE Final Submission',
-      description: 'Thesis (PDF)',
-      accept: 'pdf',
+      description: 'Thesis',
+      accept: 'document',
       required: true,
     },
   }
@@ -115,7 +115,7 @@ const ThesisWritingSection = () => {
                               thesisFile.filename,
                               0,
                             )}
-                            type='pdf'
+                            type='any'
                             aspectRatio={16 / 10}
                             actionButton={
                               ((access.student && thesis.state === ThesisState.WRITING) ||
@@ -123,7 +123,7 @@ const ThesisWritingSection = () => {
                               !isThesisClosed(thesis) ? (
                                 <UploadFileButton
                                   maxSize={25 * 1024 * 1024}
-                                  accept='pdf'
+                                  accept='document'
                                   onUpload={(file) => onFileUpload('THESIS', file)}
                                 >
                                   Upload Final CILE Project
@@ -137,7 +137,7 @@ const ThesisWritingSection = () => {
                             <Center>
                               <UploadFileButton
                                 maxSize={25 * 1024 * 1024}
-                                accept='pdf'
+                                accept='document'
                                 onUpload={(file) => onFileUpload('THESIS', file)}
                               >
                                 Upload Final CILE Project

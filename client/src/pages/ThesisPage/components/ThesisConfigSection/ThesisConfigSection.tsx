@@ -246,7 +246,7 @@ const ThesisConfigSection = () => {
           <form onSubmit={form.onSubmit(() => void onSave())}>
             <Stack gap='md'>
               <TextInput
-                label='Thesis Title'
+                label='CILE Topic Title'
                 required={true}
                 disabled={!access.advisor}
                 {...form.getInputProps('title')}
@@ -262,7 +262,7 @@ const ThesisConfigSection = () => {
                 {...form.getInputProps('type')}
               />
               <LanguageSelect
-                label='Thesis Language'
+                label='Project Language'
                 required={true}
                 {...form.getInputProps('language')}
               />

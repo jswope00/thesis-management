@@ -137,8 +137,8 @@ const CreateThesisModal = (props: ICreateThesisModalProps) => {
           <TextInput
             type='text'
             required={true}
-            placeholder='Thesis Title'
-            label='Thesis Title'
+            placeholder='CILE Topic Title'
+            label='CILE Topic Title'
             {...form.getInputProps('title')}
           />
           <Select
@@ -151,7 +151,7 @@ const CreateThesisModal = (props: ICreateThesisModalProps) => {
             {...form.getInputProps('type')}
           />
           <LanguageSelect
-            label='Thesis Language'
+            label='Project Language'
             required={true}
             {...form.getInputProps('language')}
           />

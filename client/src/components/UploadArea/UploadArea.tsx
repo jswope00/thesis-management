@@ -38,6 +38,13 @@ const UploadArea = (props: IUploadAreaProps) => {
       return PDF_MIME_TYPE
     }
 
+    if (accept === 'document') {
+      return [
+        'application/pdf',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      ]
+    }
+
     return undefined
   }
 

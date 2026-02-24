@@ -23,7 +23,7 @@ const ThesisCommentsForm = () => {
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         rightSection={
-          <UploadFileButton onUpload={setFile} maxSize={25 * 1024 * 1024} accept='any' size='xs'>
+          <UploadFileButton onUpload={setFile} maxSize={25 * 1024 * 1024} accept='document' size='xs'>
             <Upload />
           </UploadFileButton>
         }

@@ -376,7 +376,7 @@ public class ThesisService {
         ThesisProposal proposal = new ThesisProposal();
 
         proposal.setThesis(thesis);
-        proposal.setProposalFilename(uploadService.store(proposalFile, 25 * 1024 * 1024, UploadFileType.PDF));
+        proposal.setProposalFilename(uploadService.store(proposalFile, 25 * 1024 * 1024, UploadFileType.DOCUMENT));
         proposal.setCreatedAt(Instant.now());
         proposal.setCreatedBy(currentUserProvider().getUser());
 
@@ -446,7 +446,7 @@ public class ThesisService {
         ThesisResearch research = new ThesisResearch();
 
         research.setThesis(thesis);
-        research.setResearchFilename(uploadService.store(researchFile, 25 * 1024 * 1024, UploadFileType.PDF));
+        research.setResearchFilename(uploadService.store(researchFile, 25 * 1024 * 1024, UploadFileType.DOCUMENT));
         research.setCreatedAt(Instant.now());
         research.setCreatedBy(currentUserProvider().getUser());
 
@@ -527,7 +527,7 @@ public class ThesisService {
         ThesisFile thesisFile = new ThesisFile();
 
         thesisFile.setUploadName(file.getOriginalFilename());
-        thesisFile.setFilename(uploadService.store(file, 25 * 1024 * 1024, UploadFileType.ANY));
+        thesisFile.setFilename(uploadService.store(file, 25 * 1024 * 1024, UploadFileType.DOCUMENT));
         thesisFile.setUploadedBy(currentUserProvider().getUser());
         thesisFile.setUploadedAt(Instant.now());
         thesisFile.setThesis(thesis);

@@ -93,7 +93,7 @@ const ThesisProposalSection = () => {
                       proposal.filename,
                       thesis.proposals.length,
                     )}
-                    type='pdf'
+                    type='any'
                     aspectRatio={16 / 6}
                     actionButton={
                       ((access.student && thesis.state === ThesisState.PROPOSAL) || access.advisor) &&
@@ -101,7 +101,7 @@ const ThesisProposalSection = () => {
                         <UploadFileButton
                           onUpload={onUpload}
                           maxSize={25 * 1024 * 1024}
-                          accept='pdf'
+                          accept='document'
                           ml='auto'
                         >
                           Upload CILE Introduction
@@ -115,7 +115,7 @@ const ThesisProposalSection = () => {
                 <Stack>
                   <Text ta='center'>No introduction uploaded yet</Text>
                   <Center>
-                    <UploadFileButton onUpload={onUpload} maxSize={25 * 1024 * 1024} accept='pdf'>
+                    <UploadFileButton onUpload={onUpload} maxSize={25 * 1024 * 1024} accept='document'>
                       Upload CILE Introduction
                     </UploadFileButton>
                   </Center>
@@ -135,7 +135,7 @@ const ThesisProposalSection = () => {
                       thesis.proposals.length - index,
                     ),
                     url: `/v2/theses/${thesis.thesisId}/proposal/${row.proposalId}`,
-                    type: 'pdf',
+                    type: 'any',
                     uploadedBy: row.createdBy,
                     uploadedAt: row.createdAt,
                     name: `CILE Introduction v${thesis.proposals.length - index}`,

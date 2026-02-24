@@ -63,6 +63,10 @@ public class UploadService {
                 );
             }
 
+            if (type == UploadFileType.DOCUMENT) {
+                allowedExtensions = Set.of("pdf", "docx");
+            }
+
             String originalFilename = file.getOriginalFilename();
             String extension = FilenameUtils.getExtension(originalFilename);
 

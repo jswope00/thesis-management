@@ -112,7 +112,7 @@ class ApplicationControllerTest extends BaseIntegrationTest {
         createTestEmailTemplate("APPLICATION_ACCEPTED");
 
         AcceptApplicationPayload payload = new AcceptApplicationPayload(
-                "Final Thesis Title",
+                "Final CILE Topic Title",
                 "MASTER",
                 "ENGLISH",
                 List.of(advisor.userId()),

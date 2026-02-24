@@ -41,6 +41,7 @@ const AuthenticatedFilePreview = (props: IAuthenticatedFilePreviewProps) => {
               // image does not need to be a png but it will work in browser anyway.
               image: 'image/png',
               any: 'application/octet-stream',
+              document: 'application/octet-stream',
             }
 
             setFile(
