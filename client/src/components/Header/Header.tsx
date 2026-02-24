@@ -1,4 +1,6 @@
 import {
+  Badge,
+  Box,
   Burger,
   Button,
   Divider,
@@ -53,6 +55,25 @@ const Header = ({ opened, toggle, authenticatedArea }: HeaderProps) => {
       >
         <ColorSchemeToggleButton iconSize={'70%'} size={'lg'} />
         {context.isAuthenticated ? (
+          <Group gap='xs' align='center'>
+            {user ? (
+              <Box ta='right'>
+                <Text size='sm' fw={500} lh={1.2}>
+                  {user.email}
+                </Text>
+                {user.groups.length > 0 && (
+                  <Group gap={4} mt={4} justify='flex-end'>
+                    {user.groups.map((group) => (
+                      <Badge key={group} size='xs' variant='light'>
+                        {group}
+                      </Badge>
+                    ))}
+                  </Group>
+                )}
+              </Box>
+            ) : (
+              <Skeleton height={32} width={120} />
+            )}
           <Menu
             shadow='md'
             width={200}
@@ -87,6 +108,7 @@ const Header = ({ opened, toggle, authenticatedArea }: HeaderProps) => {
               </Menu.Item>
             </Menu.Dropdown>
           </Menu>
+          </Group>
         ) : (
           <Button component={Link} to='/dashboard'>
             Login

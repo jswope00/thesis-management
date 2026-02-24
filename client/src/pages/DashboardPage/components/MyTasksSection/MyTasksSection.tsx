@@ -1,4 +1,4 @@
-import { ActionIcon, Center, Group, Skeleton, Stack, Title } from '@mantine/core'
+import { ActionIcon, Badge, Center, Group, Skeleton, Stack, Text, ThemeIcon, Title } from '@mantine/core'
 import React, { useEffect, useState } from 'react'
 import { doRequest } from '../../../../requests/request'
 import { showSimpleError } from '../../../../utils/notification'
@@ -6,7 +6,7 @@ import { getApiResponseErrorMessage } from '../../../../requests/handler'
 import { ITask } from '../../../../requests/responses/dashboard'
 import { DataTable } from 'mantine-datatable'
 import { useNavigate } from 'react-router'
-import { Link as LinkIcon } from 'phosphor-react'
+import { Link as LinkIcon, WarningCircle } from 'phosphor-react'
 
 const MyTasksSection = () => {
   const navigate = useNavigate()
@@ -50,7 +50,12 @@ const MyTasksSection = () => {
 
   return (
     <Stack gap='xs'>
-      <Title order={2}>My Tasks</Title>
+      <Group gap='sm' align='center'>
+        <Title order={2}>My Tasks</Title>
+        <Badge color='red' variant='filled' size='lg' radius='sm'>
+          {tasks.length} To-Do
+        </Badge>
+      </Group>
       <DataTable
         withTableBorder
         striped
@@ -63,6 +68,16 @@ const MyTasksSection = () => {
         columns={[
           {
             accessor: 'message',
+            render: (record) => (
+              <Group gap='sm' wrap='nowrap'>
+                <ThemeIcon color='red' variant='light' size='sm' radius='xl'>
+                  <WarningCircle weight='fill' />
+                </ThemeIcon>
+                <Text size='sm' fw={500}>
+                  {record.message}
+                </Text>
+              </Group>
+            ),
           },
           {
             accessor: 'actions',
