@@ -3,7 +3,7 @@ import { ActionIcon, CopyButton, Group, Input, Text, Tooltip } from '@mantine/co
 import { Check, Copy } from 'phosphor-react'
 
 interface ILabeledItemProps {
-  label: string
+  label: ReactNode
   value: ReactNode
   copyText?: string | undefined
 }

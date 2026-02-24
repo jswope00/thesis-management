@@ -56,6 +56,7 @@ export interface IThesis {
     uploadedAt: string
     uploadedBy: ILightUser
   }>
+  oralPresentationLink: string | null
   assessment: null | {
     summary: string
     positives: string

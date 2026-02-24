@@ -31,7 +31,19 @@ const ThesisAssessmentSection = () => {
                 <DocumentEditor label='Summary' value={thesis.assessment.summary} />
                 <DocumentEditor label='Strengths' value={thesis.assessment.positives} />
                 <DocumentEditor label='Weaknesses' value={thesis.assessment.negatives} />
-                <LabeledItem label='Grade Suggestion' value={thesis.assessment.gradeSuggestion} />
+                {access.advisor ? (
+                  <LabeledItem
+                    label={
+                      <Group gap='xs'>
+                        Grade Suggestion
+                        <Badge size='xs' color='gray' variant='light'>
+                          Hidden from students
+                        </Badge>
+                      </Group>
+                    }
+                    value={thesis.assessment.gradeSuggestion}
+                  />
+                ) : null}
               </Stack>
             ) : (
               <Text ta='center'>No assessment added yet</Text>

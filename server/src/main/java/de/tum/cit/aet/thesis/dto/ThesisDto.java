@@ -39,6 +39,8 @@ public record ThesisDto(
     Instant createdAt,
     LightResearchGroupDto researchGroup,
 
+    String oralPresentationLink,
+
     ThesisAssessmentDto assessment,
     List<ThesisProposalDto> proposals,
     List<ThesisResearchDto> research,
@@ -106,6 +108,7 @@ public record ThesisDto(
         thesis.getEndDate(),
         thesis.getCreatedAt(),
         LightResearchGroupDto.fromResearchGroupEntity(thesis.getResearchGroup()),
+        thesis.getOralPresentationLink(),
         !assessments.isEmpty()
             ? ThesisDto.ThesisAssessmentDto.fromAssessmentEntity(assessments.getFirst()) : null,
         proposals.stream().map(ThesisProposalDto::fromProposalEntity).toList(),

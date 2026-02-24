@@ -20,4 +20,5 @@
     <include file="changes/custom/4_add_thesis_research.sql" relativeToChangelogFile="true"/>
     <include file="changes/custom/5_make_desired_start_date_nullable.sql" relativeToChangelogFile="true"/>
     <include file="changes/custom/6_add_reject_comment.sql" relativeToChangelogFile="true"/>
+    <include file="changes/custom/7_add_oral_presentation_link.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>

@@ -1,5 +1,5 @@
 import { IThesis, ThesisState } from '../../../../requests/responses/thesis'
-import { Accordion, Center, Group, Stack, Text, NumberInput, Modal, Button } from '@mantine/core'
+import { Accordion, Center, Group, Stack, Text, Checkbox, Modal, Button } from '@mantine/core'
 import { doRequest } from '../../../../requests/request'
 import { showSimpleError, showSimpleSuccess } from '../../../../utils/notification'
 import ConfirmationButton from '../../../../components/ConfirmationButton/ConfirmationButton'
@@ -20,24 +20,20 @@ import { useState } from 'react'
 const ThesisResearchSection = () => {
   const { thesis, access, updateThesis } = useLoadedThesisContext()
   const [gradeModalOpen, setGradeModalOpen] = useState(false)
-  const [grade, setGrade] = useState<number | ''>('')
+  const [passed, setPassed] = useState(false)
 
   const [accepting, onAccept] = useThesisUpdateAction(async () => {
-    if (grade === '' || grade < 0 || grade > 100) {
-      throw new Error('Please enter a valid grade between 0 and 100')
-    }
-
     const response = await doRequest<IThesis>(`/v2/theses/${thesis.thesisId}/research/accept`, {
       method: 'PUT',
       requiresAuth: true,
       data: {
-        grade: grade,
+        grade: 100,
       },
     })
 
     if (response.ok) {
       setGradeModalOpen(false)
-      setGrade('')
+      setPassed(false)
       return response.data
     } else {
       throw new ApiError(response)
@@ -85,7 +81,7 @@ const ThesisResearchSection = () => {
                   {research.grade && (
                     <Group justify='center' mb='md'>
                       <Text size='lg' fw={600} c='green'>
-                        Grade: {research.grade}/100
+                        Passed
                       </Text>
                     </Group>
                   )}
@@ -193,22 +189,13 @@ const ThesisResearchSection = () => {
       >
         <Stack>
           <Text size='sm'>
-            Please provide a grade for this Research Methods document. The grade is required to accept the research.
+            Please confirm that this Research Methods document has passed.
           </Text>
-          <NumberInput
-            label='Grade'
-            placeholder='Enter grade (0-100)'
-            min={0}
-            max={100}
-            value={grade}
-            onChange={(value) => setGrade(value as number | '')}
-            required
+          <Checkbox
+            label='Mark as passed'
+            checked={passed}
+            onChange={(event) => setPassed(event.currentTarget.checked)}
           />
-          {research?.grade && (
-            <Text size='sm' c='dimmed'>
-              Previous grade: {research.grade}/100
-            </Text>
-          )}
           <Group justify='flex-end'>
             <Button variant='outline' onClick={() => setGradeModalOpen(false)}>
               Cancel
@@ -216,10 +203,10 @@ const ThesisResearchSection = () => {
             <Button
               color='green'
               loading={accepting}
-              disabled={grade === '' || grade < 0 || grade > 100}
+              disabled={!passed}
               onClick={onAccept}
             >
-              Accept with Grade
+              Accept as Passed
             </Button>
           </Group>
         </Stack>

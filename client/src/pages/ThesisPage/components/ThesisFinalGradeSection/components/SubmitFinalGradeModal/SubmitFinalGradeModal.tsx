@@ -63,7 +63,7 @@ const SubmitFinalGradeModal = (props: ISubmitFinalGradeModalProps) => {
         />
         <TextInput
           required
-          label='Final Grade'
+          label='Final Grade (Visible to student)'
           value={finalGrade}
           onChange={(e) => setFinalGrade(e.target.value)}
         />

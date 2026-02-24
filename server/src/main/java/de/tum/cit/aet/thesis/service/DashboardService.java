@@ -60,7 +60,7 @@ public class DashboardService {
         for (Thesis thesis : thesisRepository.findActiveThesesForRole(user.getId(), researchGroupId, Set.of(ThesisRoleName.STUDENT), null)) {
             if (thesis.getAbstractField().isBlank() || thesis.getInfo().isBlank()) {
                 tasks.add(new TaskDto(
-                        "Add the abstract and additional information to thesis \"" + thesis.getTitle() + "\"",
+                        "Add the abstract and additional information to thesis \"" + thesis.getTitle() + "\" [DEBUG: abstractField=\"" + thesis.getAbstractField() + "\", info=\"" + thesis.getInfo() + "\"]",
                         getThesisLink(thesis),
                         50
                 ));

@@ -91,6 +91,9 @@ public class Thesis {
   @Column(name = "final_feedback")
   private String finalFeedback;
 
+  @Column(name = "oral_presentation_link")
+  private String oralPresentationLink;
+
   @Column(name = "start_date")
   private Instant startDate;
 

@@ -1,4 +1,4 @@
-import { Button, Modal, Stack, TextInput } from '@mantine/core'
+import { Badge, Button, Group, Modal, Stack, Text, TextInput } from '@mantine/core'
 import { useEffect, useState } from 'react'
 import DocumentEditor from '../../../../../../components/DocumentEditor/DocumentEditor'
 import { doRequest } from '../../../../../../requests/request'
@@ -82,7 +82,16 @@ const ReplaceAssessmentModal = (props: IReplaceAssessmentModalProps) => {
           maxLength={2000}
         />
         <TextInput
-          label='Grade Suggestion'
+          label={
+            <Group gap='xs'>
+              <Text size='sm' fw={500} component='span'>
+                Grade Suggestion
+              </Text>
+              <Badge size='xs' color='gray' variant='light'>
+                Hidden from students
+              </Badge>
+            </Group>
+          }
           required
           value={gradeSuggestion}
           onChange={(e) => setGradeSuggestion(e.target.value)}

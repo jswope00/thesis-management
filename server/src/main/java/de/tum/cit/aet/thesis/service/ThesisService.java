@@ -522,6 +522,15 @@ public class ThesisService {
     }
 
     @Transactional
+    public Thesis updateOralPresentationLink(Thesis thesis, String oralPresentationLink) {
+        currentUserProvider().assertCanAccessResearchGroup(thesis.getResearchGroup());
+
+        thesis.setOralPresentationLink(oralPresentationLink);
+
+        return thesisRepository.save(thesis);
+    }
+
+    @Transactional
     public Thesis uploadThesisFile(Thesis thesis, String type, MultipartFile file) {
         currentUserProvider().assertCanAccessResearchGroup(thesis.getResearchGroup());
         ThesisFile thesisFile = new ThesisFile();

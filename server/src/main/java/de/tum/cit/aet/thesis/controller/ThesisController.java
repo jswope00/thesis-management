@@ -449,6 +449,23 @@ public class ThesisController {
         return ResponseEntity.ok(ThesisDto.fromThesisEntity(thesis, thesis.hasAdvisorAccess(currentUser), thesis.hasStudentAccess(currentUser)));
     }
 
+    @PutMapping("/{thesisId}/thesis/oral-presentation-link")
+    public ResponseEntity<ThesisDto> updateOralPresentationLink(
+            @PathVariable UUID thesisId,
+            @RequestBody UpdateOralPresentationLinkPayload payload
+    ) {
+        User currentUser = currentUserProvider().getUser();
+        Thesis thesis = thesisService.findById(thesisId);
+
+        if (!thesis.hasStudentAccess(currentUser)) {
+            throw new AccessDeniedException("You need to be a student of the thesis to update the oral presentation link");
+        }
+
+        thesis = thesisService.updateOralPresentationLink(thesis, payload.oralPresentationLink());
+
+        return ResponseEntity.ok(ThesisDto.fromThesisEntity(thesis, thesis.hasAdvisorAccess(currentUser), thesis.hasStudentAccess(currentUser)));
+    }
+
     @PostMapping("/{thesisId}/files")
     public ResponseEntity<ThesisDto> uploadThesisFile(
             @PathVariable UUID thesisId,
