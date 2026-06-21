@@ -241,7 +241,7 @@ const ThesisConfigSection = () => {
   return (
     <Accordion variant='separated' defaultValue=''>
       <Accordion.Item value='open'>
-        <Accordion.Control>Basic Information</Accordion.Control>
+        <Accordion.Control>PUBH 831: Preparation -Topic Selection</Accordion.Control>
         <Accordion.Panel>
           <form onSubmit={form.onSubmit(() => void onSave())}>
             <Stack gap='md'>
@@ -260,11 +260,6 @@ const ThesisConfigSection = () => {
                   label: formatThesisType(key),
                 }))}
                 {...form.getInputProps('type')}
-              />
-              <LanguageSelect
-                label='Project Language'
-                required={true}
-                {...form.getInputProps('language')}
               />
               <ThesisVisibilitySelect
                 label='Visibility'

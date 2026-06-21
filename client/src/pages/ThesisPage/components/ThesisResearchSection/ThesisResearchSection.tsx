@@ -73,7 +73,7 @@ const ThesisResearchSection = () => {
         defaultValue={thesis.state === ThesisState.RESEARCH ? 'open' : ''}
       >
         <Accordion.Item value='open'>
-          <Accordion.Control>Research Methods</Accordion.Control>
+          <Accordion.Control>PUBH832: CILE Research Project</Accordion.Control>
           <Accordion.Panel>
             <Stack>
               {research ? (

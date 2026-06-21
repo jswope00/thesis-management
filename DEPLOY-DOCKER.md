@@ -2,7 +2,7 @@
 
 ## Environemnt file
 
-there must be a single `.env` file for all containers that is used by `docker-compose` while building and startup of containers. For example values check `.env-example`.
+there must be a single `.env` file for all containers that is used by `docker compose` while building and startup of containers. For example values check `.env-example`.
 
 
 ## NGINX
@@ -29,7 +29,7 @@ nginx -s reload
 startup database as first container
 
 ```bash
-docker-compose up -d --force-recreate pgdb
+docker compose up -d --force-recreate pgdb
 ```
 
 this would also run an init script located in `initdb` directory to create databases for Keycloak and Thesis-Management Server
@@ -44,7 +44,7 @@ there are two databases created:
 startup container
 
 ```bash
-docker-compose up -d --force-recreate keycloak
+docker compose up -d --force-recreate keycloak
 ```
 
 * login to Keycloak UI as admin
@@ -58,14 +58,26 @@ docker-compose up -d --force-recreate keycloak
 Build and startup server
 
 ```
- docker-compose up -d --build --force-recreate thesis-server
+ docker compose up -d --build --force-recreate thesis-server
+ podman-compose up -d --build --force-recreate thesis-server
+```
+
+Production version:
+```
+podman-compose --profile prod up -d --build --force-recreate thesis-server-prod
 ```
 
 ## Client
 
 ```
- docker-compose up -d --build --force-recreate thesis-client
+ docker compose up -d --build --force-recreate thesis-client
+ podman-compose up -d --build --force-recreate thesis-client
 
+```
+
+Production version:
+```
+podman-compose --profile prod up -d --build --force-recreate thesis-client-prod
 ```
 
 

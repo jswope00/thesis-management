@@ -69,7 +69,7 @@ const ThesisProposalSection = () => {
         defaultValue={thesis.state === ThesisState.PROPOSAL ? 'open' : ''}
       >
         <Accordion.Item value='open'>
-          <Accordion.Control>CILE Introduction</Accordion.Control>
+          <Accordion.Control>PUBH831: CILE Introduction</Accordion.Control>
           <Accordion.Panel>
             <Stack>
               {proposal ? (

@@ -108,34 +108,6 @@ const ThesisStudentInfoSection = () => {
                         />
                       </Grid.Col>
                     ))}
-                  {user.type === 'student' && (
-                    <Grid.Col span={{ md: 6 }}>
-                      <NumberInput
-                        label='Credits for Thesis'
-                        min={1}
-                        value={credits[user.data.userId]}
-                        onChange={(value) =>
-                          setCredits((prev) => {
-                            if (value) {
-                              return { ...prev, [user.data.userId]: +value }
-                            } else {
-                              delete prev[user.data.userId]
-
-                              return { ...prev }
-                            }
-                          })
-                        }
-                        inputContainer={(children) => (
-                          <Group>
-                            {children}
-                            <Button loading={updating} onClick={onUpdate}>
-                              Save
-                            </Button>
-                          </Group>
-                        )}
-                      />
-                    </Grid.Col>
-                  )}
                 </Grid>
               </Paper>
             ))}

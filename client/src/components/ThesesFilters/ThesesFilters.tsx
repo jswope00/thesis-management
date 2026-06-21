@@ -10,14 +10,26 @@ import { showSimpleError } from '../../utils/notification'
 import { getApiResponseErrorMessage } from '../../requests/handler'
 import { PaginationResponse } from '../../requests/responses/pagination'
 import { ILightUser } from '../../requests/responses/user'
-import { useLoggedInUser } from '../../hooks/authentication'
+import { useHasGroupAccess, useLoggedInUser } from '../../hooks/authentication'
 
 const ThesesFilters = () => {
   const { filters, setFilters, sort, setSort } = useThesesContext()
   const user = useLoggedInUser()
+  const canSelectOtherAdvisors = useHasGroupAccess('admin', 'supervisor')
   const [advisors, setAdvisors] = useState<ILightUser[]>([])
 
   useEffect(() => {
+    if (!canSelectOtherAdvisors) {
+      setAdvisors([user])
+      if (!filters.advisorIds?.length || !filters.advisorIds.every((advisorId) => advisorId === user.userId)) {
+        setFilters((prev) => ({
+          ...prev,
+          advisorIds: [user.userId],
+        }))
+      }
+      return
+    }
+
     doRequest<PaginationResponse<ILightUser>>(
       '/v2/users',
       {
@@ -52,7 +64,7 @@ const ThesesFilters = () => {
         }
       },
     )
-  }, [user.userId, filters.advisorIds, setFilters])
+  }, [user, canSelectOtherAdvisors, filters.advisorIds, setFilters])
 
   return (
     <Grid gutter='xs'>
@@ -135,7 +147,8 @@ const ThesesFilters = () => {
               advisorIds: value,
             }))
           }}
-          searchable
+          searchable={canSelectOtherAdvisors}
+          disabled={!canSelectOtherAdvisors}
         />
       </Grid.Col>
     </Grid>

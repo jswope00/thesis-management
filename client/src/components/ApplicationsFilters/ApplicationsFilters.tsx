@@ -10,7 +10,7 @@ import { showSimpleError } from '../../utils/notification'
 import { getApiResponseErrorMessage } from '../../requests/handler'
 import { ILightUser } from '../../requests/responses/user'
 import { PaginationResponse } from '../../requests/responses/pagination'
-import { useLoggedInUser } from '../../hooks/authentication'
+import { useHasGroupAccess, useLoggedInUser } from '../../hooks/authentication'
 
 interface IApplicationsFiltersProps {
   size?: 'xl' | 'sm'
@@ -21,10 +21,21 @@ const ApplicationsFilters = (props: IApplicationsFiltersProps) => {
 
   const { topics, filters, setFilters, sort, setSort } = useApplicationsContext()
   const user = useLoggedInUser()
-  
+  const canSelectOtherAdvisors = useHasGroupAccess('admin', 'supervisor')
   const [advisors, setAdvisors] = useState<ILightUser[]>([])
 
   useEffect(() => {
+    if (!canSelectOtherAdvisors) {
+      setAdvisors([user])
+      if (!filters.advisors?.length || !filters.advisors.every((advisorId) => advisorId === user.userId)) {
+        setFilters((prev) => ({
+          ...prev,
+          advisors: [user.userId],
+        }))
+      }
+      return
+    }
+
     doRequest<PaginationResponse<ILightUser>>(
       '/v2/users',
       {
@@ -62,7 +73,7 @@ const ApplicationsFilters = (props: IApplicationsFiltersProps) => {
         }
       },
     )
-  }, [user.userId, filters.advisors, setFilters])
+  }, [user, canSelectOtherAdvisors, filters.advisors, setFilters])
 
   return (
     <Grid gutter='sm'>
@@ -125,7 +136,7 @@ const ApplicationsFilters = (props: IApplicationsFiltersProps) => {
       <Grid.Col span={size === 'sm' ? 12 : 6}>
         <MultiSelect
           hidePickedOptions
-          label='States'
+          label='Status'
           placeholder='Application States'
           data={Object.values(ApplicationState).map((value) => ({
             value: value,
@@ -157,7 +168,8 @@ const ApplicationsFilters = (props: IApplicationsFiltersProps) => {
               advisors: value,
             }))
           }}
-          searchable
+          searchable={canSelectOtherAdvisors}
+          disabled={!canSelectOtherAdvisors}
         />
       </Grid.Col>
       <Grid.Col span={size === 'sm' ? 12 : 6}>

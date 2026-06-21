@@ -121,7 +121,7 @@ const ThesisWritingSection = () => {
   return (
     <Accordion variant='separated' defaultValue='open'>
       <Accordion.Item value='open'>
-        <Accordion.Control>Final CILE Project Submission</Accordion.Control>
+        <Accordion.Control>PUBH 893: CILE Final Paper</Accordion.Control>
         <Accordion.Panel>
           <Accordion variant='separated' defaultValue='thesis'>
             <Accordion.Item value='thesis'>
@@ -220,7 +220,7 @@ const ThesisWritingSection = () => {
               </Accordion.Panel>
             </Accordion.Item>
             <Accordion.Item value='oral-presentation'>
-              <Accordion.Control>Oral Presentation Link</Accordion.Control>
+              <Accordion.Control>PUBH 893: CILE Oral Presentation </Accordion.Control>
               <Accordion.Panel>
                 <Stack>
                   {access.student && thesis.state === ThesisState.WRITING && !isThesisClosed(thesis) ? (
